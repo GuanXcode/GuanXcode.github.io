@@ -1,5 +1,3 @@
-
-
 ![](https://raw.githubusercontent.com/guanxcode/guanxcode.github.io/master/img/readme-home.png)
 
 [![Build Status](https://travis-ci.org/guanxcode/guanxcode.github.io.svg?branch=master)](https://travis-ci.org/guanxcode/guanxcode.github.io)
@@ -16,8 +14,6 @@
 
 >
 ### [查看博客戳这里 👆](http://guanxcode.github.io)
-
-
 
 ## 使用
 
@@ -54,7 +50,7 @@
 ```
 # Site settings
 title: 鑫哥的博客                    # 你的博客网站标题
-SEOTitle: 鑫哥的博客 | BY Blog		# SEO 标题
+SEOTitle: 鑫哥的博客 | 鑫哥的博客		# SEO 标题
 description: "关注微服务、云原生、大数据技术"	   	   # 随便说点，描述一下
 
 # Build settings
