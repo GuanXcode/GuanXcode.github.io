@@ -1,9 +1,9 @@
 # Site settings
-title: BY Blog
+title: 鑫哥的博客
 SEOTitle: 鑫哥的博客 | BY Blog
 header-img: img/post-bg-desk.jpg
 email: guanx_214@126.com
-description: "关注微服务、云原生、大数据"
+description: "关注微服务、云原生、大数据技术在金融场景落地"
 keyword: "BY, BY Blog, 鑫哥的博客, GUANXIN, 关鑫, iOS, Apple, iPhone"
 url: "http://guanxcode.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
