@@ -18,9 +18,6 @@ title: 鑫哥的个人博客
 name: 鑫哥的个人博客
 description: 关注微服务、云原生、大数据等技术在金融行业的落地！！！
 
-github: https://github.com/showzeng/Minimalism
-rss: true
-
 plugins:
   - rouge
   - kramdown
