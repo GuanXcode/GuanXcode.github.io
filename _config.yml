@@ -4,10 +4,10 @@ SEOTitle: 关鑫的博客 | BY Blog
 header-img: img/post-bg-desk.jpg
 email: guanx_214@126.com
 description: "失败乃成功之母！"
-keyword: "BY, BY Blog, 关鑫的博客, qiubaiying, 关鑫, iOS, Apple, iPhone"
-url: "http://guanxcode.github.io"          # your host, for absolute URL
+keyword: "BY, BY Blog, 关鑫的博客, GuanXcode, 关鑫, iOS, Apple, iPhone"
+url: "http://GuanXcode.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
-github_repo: "https://github.com/guanxcode/guanxcode.github.io.git" # you code repository
+github_repo: "https://github.com/GuanXcode/GuanXcode.github.io.git" # you code repository
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
@@ -20,7 +20,7 @@ sidebar-avatar: /img/about-BY-gentle.jpg      # use absolute URL, seeing it's us
 RSS: false
 #weibo_username:     
 #zhihu_username:     
-github_username:    guanxcode
+github_username:    GuanXcode
 #facebook_username:  baiying.qiu.7
 #jianshu_username:   e71990ada2fd
 #twitter_username:   qiubaiying
