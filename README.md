@@ -1,8 +1,8 @@
-## Welcome to GitHub Pages
+## 欢迎来到鑫哥的个人博客
 
-You can use the [editor on GitHub](https://github.com/GuanXcode/GuanXcode.github.io/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+您可以使用 [GitHub上的编辑器](https://github.com/GuanXcode/GuanXcode.github.io/edit/master/README.md) 在 Markdown 文件中维护和预览您的网站内容。
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+无论您何时提交此存储库，GitHub Pages 都会运行[Jekyll](https://jekyllrb.com/)，以便从您的 Markdown 文件中的内容中重建您网站中的页面。
 
 ### Markdown
 
