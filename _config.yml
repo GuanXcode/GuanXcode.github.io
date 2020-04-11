@@ -1,10 +1,11 @@
 # Site settings
-title: 鑫技术，新世界
-SEOTitle: 鑫技术，新世界 | GXc-Tech Blog
+title: 鑫哥架构杂谈
+top-title: 架构哲学与思维
+SEOTitle: 鑫哥架构杂谈 | GXc-Tech Blog
 header-img: img/post-bg-universe.jpg
 email: guanx_214@126.com
 description: "Every failure is leading towards success."
-keyword: "GXc, GXc-Tech, 鑫技术，新世界, GuanXcode, 郁金香泡沫, iOS, Apple, iPhone"
+keyword: "GXc, GXc-Tech, 鑫哥架构杂谈, GuanXcode, 架构哲学与思维, iOS, Apple, iPhone"
 url: "http://guanxcode.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
 github_repo: "https://github.com/guanxcode/guanxcode.github.io.git" # you code repository
