@@ -1,10 +1,10 @@
 # Site settings
-title: 关鑫的博客
-SEOTitle: 关鑫的博客 | BY Blog
+title: 郁金香泡沫的博客
+SEOTitle: 郁金香泡沫的博客 | YJX Blog
 header-img: img/post-bg-universe.jpg
 email: guanx_214@126.com
 description: "Every failure is leading towards success."
-keyword: "BY, BY Blog, 关鑫的博客, GuanXcode, 关鑫, iOS, Apple, iPhone"
+keyword: "BY, BY Blog, 郁金香泡沫的博客, GuanXcode, 郁金香泡沫, iOS, Apple, iPhone"
 url: "http://guanxcode.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
 github_repo: "https://github.com/guanxcode/guanxcode.github.io.git" # you code repository
