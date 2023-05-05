@@ -13,7 +13,7 @@ github_repo: "https://github.com/guanxcode/guanxcode.github.io.git" # you code r
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
 sidebar-about-description: "软件复杂性存在于业务之中，而软件架构的本质就是管理复杂性"
-sidebar-avatar: /img/about-by-gentle.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-avatar: /img/avatar_m.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
