@@ -5,7 +5,7 @@ SEOTitle: 鑫哥架构杂谈 | GuanXcode Tech Blog
 header-img: img/post-bg-universe.jpg
 email: guanx214@gmail.com
 description: "Every failure is leading towards success."
-keyword: "GuanXcode, GuanXcode Tech, 鑫哥架构杂谈, 架构哲学与思维, iOS, Apple, iPhone"
+keyword: "GuanXcode, GuanXcode Tech, 鑫哥架构杂谈, 架构哲学与思维"
 url: "http://guanxcode.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
 github_repo: "https://github.com/guanxcode/guanxcode.github.io.git" # you code repository
@@ -13,7 +13,7 @@ github_repo: "https://github.com/guanxcode/guanxcode.github.io.git" # you code r
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
 sidebar-about-description: "软件复杂性存在于业务之中，而软件架构的本质就是管理复杂性"
-sidebar-avatar: /img/about-BY-gentle.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-avatar: /img/about-by-gentle.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
@@ -100,9 +100,6 @@ service-worker: true
 # Friends
 friends: [
     {
-        title: "ChatGPT mirror",
-        href: "https://chatgptmirror.com/chat"
-    },{
         title: "Java全栈知识体系",
         href: "https://pdai.tech/"
     },{
