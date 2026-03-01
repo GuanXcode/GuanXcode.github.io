@@ -1,11 +1,11 @@
 # Site settings
-title: 鑫哥架构杂谈
-top-title: 架构哲学与思维
-SEOTitle: 鑫哥架构杂谈 | GuanXcode Tech Blog
+title: AI学不懂
+top-title: AI学不懂
+SEOTitle: AI学不懂 | GuanXcode Tech Blog
 header-img: img/post-bg-universe.jpg
 email: guanx214@gmail.com
 description: "Every failure is leading towards success."
-keyword: "GuanXcode, GuanXcode Tech, 鑫哥架构杂谈, 架构哲学与思维"
+keyword: "GuanXcode, GuanXcode Tech, AI, AI学不懂"
 url: "http://guanxcode.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
 github_repo: "https://github.com/guanxcode/guanxcode.github.io.git" # you code repository
@@ -100,9 +100,6 @@ service-worker: true
 # Friends
 friends: [
     {
-        title: "Java全栈知识体系",
-        href: "https://pdai.tech/"
-    },{
         title: "Github GuanXcode",
         href: "https://github.com/GuanXcode"
     }
