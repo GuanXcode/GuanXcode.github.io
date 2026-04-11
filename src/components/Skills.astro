@@ -7,7 +7,7 @@ interface Props {
 const { title, items } = Astro.props;
 ---
 
-<div class="p-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] hover:border-[var(--color-text-muted)] transition-colors">
+<div class="p-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] hover:shadow-md transition-shadow">
   <h3 class="font-semibold text-base mb-3">{title}</h3>
   <ul class="space-y-1.5">
     {items.map((item) => (

@@ -10,7 +10,7 @@ interface Props {
 const { title, description, tech, url, image } = Astro.props;
 ---
 
-<div class="group p-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] hover:border-[var(--color-text-muted)] transition-all">
+<div class="group p-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] hover:shadow-md transition-all">
   {image && (
     <img src={image} alt={title} class="w-full h-40 object-cover rounded-lg mb-4" loading="lazy" />
   )}
