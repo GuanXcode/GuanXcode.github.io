@@ -1,0 +1,20 @@
+---
+interface Props {
+  title: string;
+  items: string[];
+}
+
+const { title, items } = Astro.props;
+---
+
+<div class="p-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] hover:border-[var(--color-text-muted)] transition-colors">
+  <h3 class="font-semibold text-base mb-3">{title}</h3>
+  <ul class="space-y-1.5">
+    {items.map((item) => (
+      <li class="text-sm text-[var(--color-text-secondary)] flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-brand)] shrink-0"></span>
+        {item}
+      </li>
+    ))}
+  </ul>
+</div>
