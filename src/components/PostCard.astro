@@ -1,0 +1,30 @@
+---
+interface Props {
+  title: string;
+  excerpt?: string;
+  date: Date;
+  tags?: string[];
+  slug: string;
+}
+
+const { title, excerpt, date, tags = [], slug } = Astro.props;
+
+const dateStr = date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<a href={`/blog/${slug}/`} class="block group p-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] hover:border-[var(--color-text-muted)] transition-all">
+  <h3 class="font-semibold text-base mb-1 group-hover:text-[var(--color-brand)] transition-colors">{title}</h3>
+  {excerpt && (
+    <p class="text-sm text-[var(--color-text-secondary)] mb-3 line-clamp-2">{excerpt}</p>
+  )}
+  <div class="flex items-center gap-3 text-xs text-[var(--color-text-muted)]">
+    <time>{dateStr}</time>
+    {tags.length > 0 && (
+      <div class="flex gap-1.5">
+        {tags.map((tag) => (
+          <span class="px-1.5 py-0.5 rounded bg-[var(--color-bg-alt)]">#{tag}</span>
+        ))}
+      </div>
+    )}
+  </div>
+</a>

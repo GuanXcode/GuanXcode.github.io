@@ -1,0 +1,28 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  tech: string[];
+  url?: string;
+  image?: string;
+}
+
+const { title, description, tech, url, image } = Astro.props;
+---
+
+<div class="group p-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] hover:border-[var(--color-text-muted)] transition-all">
+  {image && (
+    <img src={image} alt={title} class="w-full h-40 object-cover rounded-lg mb-4" loading="lazy" />
+  )}
+  <h3 class="font-semibold text-base mb-2 group-hover:text-[var(--color-brand)] transition-colors">
+    {url ? (
+      <a href={url} target="_blank" rel="noopener noreferrer" class="hover:underline">{title}</a>
+    ) : title}
+  </h3>
+  <p class="text-sm text-[var(--color-text-secondary)] mb-3">{description}</p>
+  <div class="flex flex-wrap gap-1.5">
+    {tech.map((t) => (
+      <span class="text-xs px-2 py-0.5 rounded bg-[var(--color-bg-alt)] text-[var(--color-text-muted)]">{t}</span>
+    ))}
+  </div>
+</div>

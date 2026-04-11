@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
+---
+
+<Base title="博客 — AI架构原力">
+  <section class="py-16">
+    <div class="max-w-3xl mx-auto px-6">
+      <h1 class="text-3xl font-bold tracking-tight mb-8">博客</h1>
+
+      <!-- 标签筛选 -->
+      {allTags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-10">
+          <a href="/blog/" class="text-sm px-3 py-1 rounded-full border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-colors">
+            全部
+          </a>
+          {allTags.map((tag) => (
+            <a href={`/blog/tag/${tag}/`} class="text-sm px-3 py-1 rounded-full border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-colors">
+              {tag}
+            </a>
+          ))}
+        </div>
+      )}
+
+      <!-- 文章列表 -->
+      <div class="space-y-4">
+        {allPosts.length > 0 ? (
+          allPosts.map((post) => (
+            <PostCard
+              title={post.data.title}
+              excerpt={post.data.subtitle || post.body?.replace(/<[^>]*>/g, '').replace(/[#*>`\[\]()!]/g, '').trim().slice(0, 150)}
+              date={post.data.date}
+              tags={post.data.tags}
+              slug={post.id}
+            />
+          ))
+        ) : (
+          <p class="text-[var(--color-text-muted)]">暂无文章</p>
+        )}
+      </div>
+    </div>
+  </section>
+</Base>
