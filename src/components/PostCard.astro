@@ -12,7 +12,7 @@ const { title, excerpt, date, tags = [], slug } = Astro.props;
 const dateStr = date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
-<a href={`/blog/${slug}/`} class="block group p-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] hover:border-[var(--color-text-muted)] transition-all">
+<a href={`/blog/${slug}/`} class="block group p-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] hover:shadow-md transition-all">
   <h3 class="font-semibold text-base mb-1 group-hover:text-[var(--color-brand)] transition-colors">{title}</h3>
   {excerpt && (
     <p class="text-sm text-[var(--color-text-secondary)] mb-3 line-clamp-2">{excerpt}</p>
