@@ -5,6 +5,8 @@ interface Props {
 }
 
 const { title, description = 'AI架构原力 (AI Arch Force) — AI 场景化落地与技术架构实践' } = Astro.props;
+
+import '../styles/global.css';
 ---
 
 <!doctype html>
@@ -17,7 +19,6 @@ const { title, description = 'AI架构原力 (AI Arch Force) — AI 场景化落
     <meta name="theme-color" content="#0a0a0a" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
-    <link rel="stylesheet" href="/src/styles/global.css" />
     <title>{title}</title>
   </head>
   <body class="min-h-screen flex flex-col">
