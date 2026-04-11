@@ -1,84 +1,75 @@
 /*!
- * Clean Blog v1.0.0 (http://startbootstrap.com)
- * Copyright 2015 Start Bootstrap
- * Licensed under Apache 2.0 (https://github.com/IronSummitMedia/startbootstrap/blob/gh-pages/LICENSE)
+ * hux-blog.js — Vanilla JS rewrite (no jQuery dependency)
  */
 
- /*!
- * Hux Blog v1.6.0 (http://startbootstrap.com)
- * Copyright 2016 @huxpro
- * Licensed under Apache 2.0 
- */
-
-// Tooltip Init
-// Unuse by Hux since V1.6: Titles now display by default so there is no need for tooltip
-// $(function() {
-//     $("[data-toggle='tooltip']").tooltip();
-// });
-
-
-// make all images responsive
-/* 
- * Unuse by Hux
- * actually only Portfolio-Pages can't use it and only post-img need it.
- * so I modify the _layout/post and CSS to make post-img responsive!
- */
-// $(function() {
-//  $("img").addClass("img-responsive");
-// });
-
-// responsive tables
-$(document).ready(function() {
-    $("table").wrap("<div class='table-responsive'></div>");
-    $("table").addClass("table");
+// Responsive tables
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.post-container table').forEach(function(table) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'table-responsive';
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+        table.classList.add('table');
+    });
 });
 
-// responsive embed videos
-$(document).ready(function() {
-    $('iframe[src*="youtube.com"]').wrap('<div class="embed-responsive embed-responsive-16by9"></div>');
-    $('iframe[src*="youtube.com"]').addClass('embed-responsive-item');
-    $('iframe[src*="vimeo.com"]').wrap('<div class="embed-responsive embed-responsive-16by9"></div>');
-    $('iframe[src*="vimeo.com"]').addClass('embed-responsive-item');
+// Responsive embed videos
+document.addEventListener('DOMContentLoaded', function() {
+    var selectors = [
+        'iframe[src*="youtube.com"]',
+        'iframe[src*="vimeo.com"]'
+    ];
+    document.querySelectorAll(selectors.join(',')).forEach(function(iframe) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'embed-responsive embed-responsive-16by9';
+        iframe.parentNode.insertBefore(wrapper, iframe);
+        wrapper.appendChild(iframe);
+        iframe.classList.add('embed-responsive-item');
+    });
 });
 
-// Navigation Scripts to Show Header on Scroll-Up
-jQuery(document).ready(function($) {
+// Navigation: show header on scroll-up, hide on scroll-down
+document.addEventListener('DOMContentLoaded', function() {
     var MQL = 1170;
+    if (window.innerWidth <= MQL) return;
 
-    //primary navigation slide-in effect
-    if ($(window).width() > MQL) {
-        var headerHeight = $('.navbar-custom').height(),
-            bannerHeight  = $('.intro-header .container').height();     
-        $(window).on('scroll', {
-                previousTop: 0
-            },
-            function() {
-                var currentTop = $(window).scrollTop(),
-                    $catalog = $('.side-catalog');
+    var navbar = document.querySelector('.navbar-custom');
+    var catalog = document.querySelector('.side-catalog');
+    if (!navbar) return;
 
-                //check if user is scrolling up by mouse or keyborad
-                if (currentTop < this.previousTop) {
-                    //if scrolling up...
-                    if (currentTop > 0 && $('.navbar-custom').hasClass('is-fixed')) {
-                        $('.navbar-custom').addClass('is-visible');
-                    } else {
-                        $('.navbar-custom').removeClass('is-visible is-fixed');
-                    }
-                } else {
-                    //if scrolling down...
-                    $('.navbar-custom').removeClass('is-visible');
-                    if (currentTop > headerHeight && !$('.navbar-custom').hasClass('is-fixed')) $('.navbar-custom').addClass('is-fixed');
-                }
-                this.previousTop = currentTop;
+    var headerHeight = navbar.offsetHeight;
+    var banner = document.querySelector('.intro-header .container');
+    var bannerHeight = banner ? banner.offsetHeight : 0;
+    var previousTop = 0;
 
+    window.addEventListener('scroll', function() {
+        var currentTop = window.pageYOffset;
 
-                //adjust the appearance of side-catalog
-                $catalog.show()
-                if (currentTop > (bannerHeight + 41)) {
-                    $catalog.addClass('fixed')
-                } else {
-                    $catalog.removeClass('fixed')
-                }
-            });
-    }
+        if (currentTop < previousTop) {
+            // scrolling up
+            if (currentTop > 0 && navbar.classList.contains('is-fixed')) {
+                navbar.classList.add('is-visible');
+            } else {
+                navbar.classList.remove('is-visible');
+                navbar.classList.remove('is-fixed');
+            }
+        } else {
+            // scrolling down
+            navbar.classList.remove('is-visible');
+            if (currentTop > headerHeight && !navbar.classList.contains('is-fixed')) {
+                navbar.classList.add('is-fixed');
+            }
+        }
+        previousTop = currentTop;
+
+        // adjust side-catalog
+        if (catalog) {
+            catalog.style.display = '';
+            if (currentTop > (bannerHeight + 41)) {
+                catalog.classList.add('fixed');
+            } else {
+                catalog.classList.remove('fixed');
+            }
+        }
+    });
 });

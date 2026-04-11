@@ -19,7 +19,8 @@
                     <li>
                         <a href="{{ site.baseurl }}/">首页</a>
                     </li>
-                    {% for page in site.pages %}{% if page.title %}
+                    {% assign sorted_pages = site.pages | sort: "nav-order" %}
+                    {% for page in sorted_pages %}{% if page.title %}
                     <li>
                         <a href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a>
                     </li>
