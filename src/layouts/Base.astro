@@ -49,14 +49,14 @@ import '../styles/global.css';
       </div>
     </footer>
     <!-- 悬浮客服按钮 -->
-    <button id="chat-btn" aria-label="联系我" class="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-[var(--color-brand)] text-white shadow-lg hover:bg-[var(--color-brand-light)] transition-colors flex items-center justify-center">
+    <button id="chat-btn" aria-label="联系我" class="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-[var(--color-brand-light)] text-white shadow-lg hover:bg-[var(--color-brand)] transition-colors flex items-center justify-center">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/>
       </svg>
     </button>
 
     <!-- 对话框 -->
-    <div id="chat-dialog" class="fixed bottom-22 right-6 z-50 hidden w-80 rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)] shadow-xl overflow-hidden">
+    <div id="chat-dialog" class="fixed bottom-20 right-6 z-50 hidden w-80 rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)] shadow-xl overflow-hidden">
       <div class="flex items-center justify-between px-4 py-3 bg-[var(--color-brand)] text-white">
         <span class="font-semibold text-sm">联系木瓦匠</span>
         <button id="chat-close" aria-label="关闭" class="hover:opacity-70 transition-opacity">
@@ -83,10 +83,16 @@ import '../styles/global.css';
       const btn = document.getElementById('chat-btn');
       const dialog = document.getElementById('chat-dialog');
       const close = document.getElementById('chat-close');
-      btn?.addEventListener('click', () => dialog?.classList.toggle('hidden'));
-      close?.addEventListener('click', () => dialog?.classList.add('hidden'));
+      btn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dialog?.classList.toggle('hidden');
+      });
+      close?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dialog?.classList.add('hidden');
+      });
       document.addEventListener('click', (e) => {
-        if (!dialog?.contains(e.target as Node) && e.target !== btn) {
+        if (!dialog?.classList.contains('hidden') && !dialog?.contains(e.target as Node)) {
           dialog?.classList.add('hidden');
         }
       });
