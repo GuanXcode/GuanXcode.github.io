@@ -10,7 +10,7 @@ const allPosts = (await getCollection('blog'))
 const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
 ---
 
-<Base title="博客 — AI架构原力">
+<Base title="博客 — 木瓦匠@AI">
   <section class="py-16">
     <div class="max-w-3xl mx-auto px-6">
       <h1 class="text-3xl font-bold tracking-tight mb-8">博客</h1>
