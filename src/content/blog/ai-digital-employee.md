@@ -9,7 +9,7 @@ tags:
 
 # AI数字员工
 
-<img width="2752" height="1536" alt="数字员工架构" src="https://github.com/user-attachments/assets/352dd4f8-f50e-4617-8104-d4c2c19bb52e" />
+![数字员工架构](/img/ai-digital-employee-arch.png)
 
 ## 架构分层解析
 
