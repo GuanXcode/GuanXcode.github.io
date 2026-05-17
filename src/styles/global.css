@@ -34,6 +34,55 @@ h1, h2, h3, .brand-display {
   letter-spacing: -0.02em;
 }
 
+.about-panel {
+  position: relative;
+  padding: 2rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(240,248,255,0.85) 100%);
+  box-shadow: 0 8px 30px rgba(2, 132, 199, 0.08);
+}
+
+.about-solo {
+  font-size: clamp(1.5rem, 3.8vw, 2.35rem);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  color: #0b3b61;
+}
+
+.about-highlight {
+  background: linear-gradient(90deg, #0284c7 0%, #06b6d4 50%, #0ea5e9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 12px rgba(14, 165, 233, 0.22);
+}
+
+.about-keyword {
+  color: #0b67a2;
+  font-weight: 700;
+}
+
+.about-fade-in {
+  animation: aboutFadeIn 0.7s ease-out both;
+}
+
+.about-fade-in-delay {
+  animation: aboutFadeIn 0.7s ease-out 0.14s both;
+}
+
+@keyframes aboutFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .prose h1, .prose h2, .prose h3, .prose h4 { font-weight: 700; margin-top: 2em; margin-bottom: 0.5em; color: var(--color-text); }
 .prose h2 { font-size: 1.5rem; }
 .prose h3 { font-size: 1.25rem; }
