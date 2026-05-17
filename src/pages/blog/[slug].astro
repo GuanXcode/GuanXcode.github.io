@@ -1,13 +1,11 @@
 ﻿---
 import Base from '../../layouts/Base.astro';
+import SectionTitle from '../../components/SectionTitle.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
 }
 
 const { post } = Astro.props;
@@ -20,55 +18,30 @@ const allPosts = (await getCollection('blog'))
 const currentIndex = allPosts.findIndex((p) => p.id === post.id);
 const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
 const nextPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
-
 const dateStr = post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
-<Base title={`${post.data.title} - 木瓜匣AI`} description={post.data.subtitle}>
+<Base title={`${post.data.title} - AI克塞号 / AI Kosei`} description={post.data.subtitle}>
   <article class="py-16">
     <div class="max-w-3xl mx-auto px-6">
-      <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] transition-colors mb-8">
-        &larr; 返回博客
-      </a>
-
+      <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] transition-colors mb-8">&larr; 返回时间线日志</a>
       <header class="mb-10">
-        <h1 class="text-3xl font-bold tracking-tight mb-3">{post.data.title}</h1>
-        {post.data.subtitle && (
-          <p class="text-lg text-[var(--color-text-secondary)] mb-4">{post.data.subtitle}</p>
-        )}
+        <div class="mb-3">
+          <SectionTitle title={post.data.title} icon="article" />
+        </div>
+        {post.data.subtitle && <p class="text-lg text-[var(--color-text-secondary)] mb-4">{post.data.subtitle}</p>}
         <div class="flex items-center gap-3 text-sm text-[var(--color-text-muted)]">
-          <time>{dateStr}</time>
+          <span>坐标 {dateStr}</span>
           <span>&middot;</span>
-          <span>{post.data.author}</span>
-          {post.data.tags.length > 0 && (
-            <>
-              <span>&middot;</span>
-              <div class="flex gap-1.5">
-                {post.data.tags.map((tag) => (
-                  <a href={`/blog/tag/${tag}/`} class="hover:text-[var(--color-brand)] transition-colors">#{tag}</a>
-                ))}
-              </div>
-            </>
-          )}
+          <span>记录者 {post.data.author}</span>
+          {post.data.tags.length > 0 && <><span>&middot;</span><div class="flex gap-1.5">{post.data.tags.map((tag) => <a href={`/blog/tag/${tag}/`} class="hover:text-[var(--color-brand)] transition-colors">#{tag}</a>)}</div></>}
         </div>
       </header>
-
-      <div class="prose">
-        <Content />
-      </div>
-
+      <div class="prose"><Content /></div>
       {(prevPost || nextPost) && (
         <nav class="mt-16 pt-8 border-t border-[var(--color-border)] flex justify-between gap-4">
-          {prevPost ? (
-            <a href={`/blog/${prevPost.id}/`} class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-brand)] transition-colors">
-              &larr; {prevPost.data.title}
-            </a>
-          ) : <div />}
-          {nextPost ? (
-            <a href={`/blog/${nextPost.id}/`} class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-brand)] transition-colors text-right">
-              {nextPost.data.title} &rarr;
-            </a>
-          ) : <div />}
+          {prevPost ? <a href={`/blog/${prevPost.id}/`} class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-brand)] transition-colors">&larr; 上一坐标：{prevPost.data.title}</a> : <div />}
+          {nextPost ? <a href={`/blog/${nextPost.id}/`} class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-brand)] transition-colors text-right">下一坐标：{nextPost.data.title} &rarr;</a> : <div />}
         </nav>
       )}
     </div>

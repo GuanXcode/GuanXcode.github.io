@@ -6,6 +6,7 @@ import Skills from '../components/Skills.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import PostCard from '../components/PostCard.astro';
 import Contact from '../components/Contact.astro';
+import SectionTitle from '../components/SectionTitle.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = (await getCollection('blog'))
@@ -28,14 +29,16 @@ const skills = [
 ];
 ---
 
-<Base title="木瓜匣AI - GuanXcode">
+<Base title="AI克塞号 / AI Kosei">
   <Hero />
 
   <About />
 
   <section id="skills" class="py-20">
     <div class="max-w-5xl mx-auto px-6">
-      <h2 class="text-2xl font-bold tracking-tight mb-8">技能</h2>
+      <div class="mb-8">
+        <SectionTitle title="能力坐标" icon="skills" />
+      </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {skills.map((s) => <Skills title={s.title} items={s.items} />)}
       </div>
@@ -46,7 +49,7 @@ const skills = [
     <section id="projects" class="py-20 bg-[var(--color-bg-alt)]">
       <div class="max-w-5xl mx-auto px-6">
         <div class="flex items-center justify-between mb-8">
-          <h2 class="text-2xl font-bold tracking-tight">精选项目</h2>
+          <SectionTitle title="任务编队" icon="projects" />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {displayProjects.map((project) => (
@@ -67,7 +70,7 @@ const skills = [
     <section class="py-20">
       <div class="max-w-5xl mx-auto px-6">
         <div class="flex items-center justify-between mb-8">
-          <h2 class="text-2xl font-bold tracking-tight">最新文章</h2>
+          <SectionTitle title="时间线日志" icon="timeline" />
           <a href="/blog/" class="text-sm text-[var(--color-brand)] hover:underline">全部文章 &rarr;</a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
