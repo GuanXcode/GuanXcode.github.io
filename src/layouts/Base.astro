@@ -47,6 +47,63 @@ import '../styles/global.css';
         <p>&copy; 2026 AI克塞号 / AI Kosei · Powered by Astro</p>
       </div>
     </footer>
+
+    <button id="support-btn" aria-label="打开联系方式" class="support-fab" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/>
+      </svg>
+    </button>
+
+    <div id="support-modal" class="support-modal hidden" role="dialog" aria-modal="true" aria-labelledby="support-title">
+      <div class="support-card">
+        <div class="flex items-center justify-between mb-3">
+          <h3 id="support-title" class="font-semibold text-[var(--color-text)]">联系 AI克塞号</h3>
+          <button id="support-close" type="button" class="text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors" aria-label="关闭弹窗">✕</button>
+        </div>
+        <p class="text-sm text-[var(--color-text-secondary)] mb-4">欢迎交流项目协作、技术咨询与内容合作。</p>
+        <div class="space-y-2">
+          <a href="mailto:guanx214@gmail.com" class="support-link">
+            <span>邮箱</span>
+            <span class="font-mono text-xs">guanx214@gmail.com</span>
+          </a>
+          <a href="https://github.com/GuanXcode" target="_blank" rel="noopener noreferrer" class="support-link">
+            <span>GitHub</span>
+            <span class="font-mono text-xs">github.com/GuanXcode</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const supportBtn = document.getElementById('support-btn');
+      const supportModal = document.getElementById('support-modal');
+      const supportClose = document.getElementById('support-close');
+
+      const openModal = () => supportModal?.classList.remove('hidden');
+      const closeModal = () => supportModal?.classList.add('hidden');
+
+      supportBtn?.addEventListener('click', (event) => {
+        event.stopPropagation();
+        if (supportModal?.classList.contains('hidden')) {
+          openModal();
+        } else {
+          closeModal();
+        }
+      });
+
+      supportClose?.addEventListener('click', closeModal);
+
+      supportModal?.addEventListener('click', (event) => {
+        if (event.target === supportModal) {
+          closeModal();
+        }
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeModal();
+        }
+      });
+    </script>
   </body>
 </html>
-
