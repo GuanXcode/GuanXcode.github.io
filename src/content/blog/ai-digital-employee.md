@@ -1,6 +1,6 @@
----
+﻿---
 title: "AI数字员工"
-subtitle: "Hi，AI"
+subtitle: "从能力中心到任务编排的一体化设计"
 date: 2026-03-01
 author: GuanXin
 tags:
@@ -13,28 +13,26 @@ tags:
 
 ## 架构分层解析
 
-#### 用户交互层 (User Interaction Layer)
+### 用户交互层（User Interaction Layer）
 
-> 这是系统的最顶层，支持多种渠道接入。除了标准的 Web 门户外，还整合了主流的企业协作工具，包括 Slack、企业微信 和 钉钉，实现了多端协同。
+这是系统最上层，支持 Web 入口与协作工具接入（如 Slack、企业微信、钉钉），实现多端协同。
 
-#### API 网关层 (API Gateway Layer)
+### API 网关层（API Gateway Layer）
 
-> 作为系统的统一入口，负责处理流量和安全。主要功能包括 认证授权 (OAuth/JWT)、限流熔断以及路由转发，确保请求安全且稳定地传递到后端。
+作为统一入口，负责认证授权（OAuth/JWT）、限流熔断和路由转发，保障请求安全与稳定。
 
-#### 数字员工调度层 (Digital Employee Dispatch Layer)
+### 数字员工调度层（Dispatch Layer）
 
-> 这是架构的核心控制层，包含 数字员工管理器 (Digital Employee Manager)。它负责员工的生命周期管理，具备 员工注册中心 (Registry)、技能发现 (Discovery) 和 负载均衡 (LoadBalancer) 功能，确保任务能被正确分配给合适的数字员工实例。
+核心控制层，负责数字员工生命周期管理，包括注册中心、能力发现与负载均衡。
 
-#### 业务逻辑层 (Specific Employees)
+### 业务员工层（Specific Employees）
 
-> 在该层中，不同的数字员工根据职能被具体化，例如 销售员工 (Sales)、客服员工 (Support) 和 HR员工 (HR)。这些员工由调度层管理，并调用下层的共享能力。
+按业务域拆分不同员工实例，例如销售、客服与 HR，由调度层统一编排。
 
-#### 共享能力层 (Shared Capabilities)
+### 共享能力层（Shared Capabilities）
 
-> 这是为所有数字员工提供的通用工具集，分为两类能力：
-> * 核心AI与处理能力：包括 LLM调用 (AI Core)、知识检索 (RAG)、代码执行 (Sandbox)、数据分析 (Pandas) 和 文件处理 (Parser)。
-> * 系统交互与基础工具：包括 浏览器控制、数据库操作、API调用、消息通知 以及 定时任务。
+提供通用能力，如 LLM 调用、RAG 检索、代码执行沙箱、数据分析与文件解析。
 
-#### 数据持久化层 (Data Persistence Layer)
+### 数据持久化层（Data Persistence Layer）
 
-> 最底层负责数据的存储与缓存。架构选用了 PostgreSQL 作为主数据库，Redis 用于缓存以提升性能，以及 对象存储 (S3/MinIO) 用于存储文件等非结构化数据
+通过 PostgreSQL、Redis 与对象存储（S3/MinIO）构建稳定的数据底座。

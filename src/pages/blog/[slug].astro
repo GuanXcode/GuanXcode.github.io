@@ -1,4 +1,4 @@
----
+﻿---
 import Base from '../../layouts/Base.astro';
 import { getCollection, render } from 'astro:content';
 
@@ -24,15 +24,13 @@ const nextPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
 const dateStr = post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
-<Base title={`${post.data.title} — 木瓦匠@AI`} description={post.data.subtitle}>
+<Base title={`${post.data.title} - 木瓜匣AI`} description={post.data.subtitle}>
   <article class="py-16">
     <div class="max-w-3xl mx-auto px-6">
-      <!-- 返回链接 -->
       <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] transition-colors mb-8">
         &larr; 返回博客
       </a>
 
-      <!-- 文章头 -->
       <header class="mb-10">
         <h1 class="text-3xl font-bold tracking-tight mb-3">{post.data.title}</h1>
         {post.data.subtitle && (
@@ -55,12 +53,10 @@ const dateStr = post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', mo
         </div>
       </header>
 
-      <!-- 正文 -->
       <div class="prose">
         <Content />
       </div>
 
-      <!-- 上下篇导航 -->
       {(prevPost || nextPost) && (
         <nav class="mt-16 pt-8 border-t border-[var(--color-border)] flex justify-between gap-4">
           {prevPost ? (
