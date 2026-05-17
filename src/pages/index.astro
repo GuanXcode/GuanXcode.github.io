@@ -39,8 +39,27 @@ const skills = [
       <div class="mb-8">
         <SectionTitle title="能力坐标" icon="skills" />
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {skills.map((s) => <Skills title={s.title} items={s.items} />)}
+      <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-start">
+        <aside class="radar-panel">
+          <div class="radar-grid">
+            <span class="radar-ring r1"></span>
+            <span class="radar-ring r2"></span>
+            <span class="radar-ring r3"></span>
+            <span class="radar-axis a1"></span>
+            <span class="radar-axis a2"></span>
+            <span class="radar-axis a3"></span>
+            <span class="radar-pulse"></span>
+            <span class="radar-dot d1"></span>
+            <span class="radar-dot d2"></span>
+            <span class="radar-dot d3"></span>
+            <span class="radar-dot d4"></span>
+          </div>
+          <p class="text-xs text-[var(--color-text-secondary)] mt-4">能力矩阵在线校准中</p>
+        </aside>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {skills.map((s, i) => <Skills title={s.title} items={s.items} index={i} />)}
+        </div>
       </div>
     </div>
   </section>
