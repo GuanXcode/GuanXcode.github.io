@@ -23,23 +23,23 @@ const dateStr = post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', mo
 
 <Base title={`${post.data.title} - AI克塞号 / AI Kosei`} description={post.data.subtitle}>
   <article class="py-16">
-    <div class="max-w-3xl mx-auto px-6">
-      <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] transition-colors mb-8">&larr; 返回时间线日志</a>
-      <header class="mb-10">
+    <div class="max-w-4xl mx-auto px-6">
+      <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] transition-colors mb-4">&larr; 返回时间线日志</a>
+      <header class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm mb-8">
         <div class="mb-3">
           <SectionTitle title={post.data.title} icon="article" />
         </div>
         {post.data.subtitle && <p class="text-lg text-[var(--color-text-secondary)] mb-4">{post.data.subtitle}</p>}
-        <div class="flex items-center gap-3 text-sm text-[var(--color-text-muted)]">
+        <div class="flex flex-wrap items-center gap-3 text-sm text-[var(--color-text-muted)]">
           <span>坐标 {dateStr}</span>
           <span>&middot;</span>
           <span>记录者 {post.data.author}</span>
           {post.data.tags.length > 0 && <><span>&middot;</span><div class="flex gap-1.5">{post.data.tags.map((tag) => <a href={`/blog/tag/${tag}/`} class="hover:text-[var(--color-brand)] transition-colors">#{tag}</a>)}</div></>}
         </div>
       </header>
-      <div class="prose"><Content /></div>
+      <div class="prose rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/85 p-6 md:p-8 shadow-sm"><Content /></div>
       {(prevPost || nextPost) && (
-        <nav class="mt-16 pt-8 border-t border-[var(--color-border)] flex justify-between gap-4">
+        <nav class="mt-10 pt-8 border-t border-[var(--color-border)] flex justify-between gap-4">
           {prevPost ? <a href={`/blog/${prevPost.id}/`} class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-brand)] transition-colors">&larr; 上一坐标：{prevPost.data.title}</a> : <div />}
           {nextPost ? <a href={`/blog/${nextPost.id}/`} class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-brand)] transition-colors text-right">下一坐标：{nextPost.data.title} &rarr;</a> : <div />}
         </nav>
