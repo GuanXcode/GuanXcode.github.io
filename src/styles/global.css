@@ -2,15 +2,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand: #0ea5e9;
-  --color-brand-light: #22d3ee;
-  --color-bg: #0b1220;
-  --color-bg-alt: #111a2e;
-  --color-text: #e6edf7;
-  --color-text-secondary: #9fb0c7;
-  --color-text-muted: #7f93ad;
-  --color-border: #22324a;
-  --color-card: #111a2e;
+  --color-brand: #0284c7;
+  --color-brand-light: #06b6d4;
+  --color-bg: #f3f8ff;
+  --color-bg-alt: #eaf2ff;
+  --color-text: #0f172a;
+  --color-text-secondary: #334155;
+  --color-text-muted: #64748b;
+  --color-border: #cfe0f5;
+  --color-card: #ffffff;
   --font-sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
   --font-display: "Space Grotesk", "Noto Sans SC", sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", "Consolas", monospace;
@@ -24,9 +24,9 @@ body {
   line-height: 1.75;
   -webkit-font-smoothing: antialiased;
   background:
-    radial-gradient(circle at 15% 15%, rgba(34, 211, 238, 0.16), transparent 35%),
-    radial-gradient(circle at 85% 10%, rgba(14, 165, 233, 0.18), transparent 40%),
-    linear-gradient(180deg, #0b1220 0%, #0b1220 100%);
+    radial-gradient(circle at 10% 12%, rgba(6, 182, 212, 0.14), transparent 32%),
+    radial-gradient(circle at 88% 8%, rgba(2, 132, 199, 0.12), transparent 38%),
+    linear-gradient(180deg, #f8fbff 0%, #edf4ff 100%);
 }
 
 h1, h2, h3, .brand-display {
@@ -38,12 +38,12 @@ h1, h2, h3, .brand-display {
 .prose h2 { font-size: 1.5rem; }
 .prose h3 { font-size: 1.25rem; }
 .prose p { margin-bottom: 1em; }
-.prose a { color: var(--color-brand-light); text-decoration: underline; text-underline-offset: 2px; }
-.prose a:hover { color: var(--color-brand); }
+.prose a { color: var(--color-brand); text-decoration: underline; text-underline-offset: 2px; }
+.prose a:hover { color: var(--color-brand-light); }
 .prose img { max-width: 100%; height: auto; border-radius: 8px; margin: 1.5em 0; }
-.prose pre { background: #0a1020; color: #e2e8f0; border-radius: 8px; padding: 1em; overflow-x: auto; font-size: 0.875rem; margin: 1.5em 0; border: 1px solid var(--color-border); }
+.prose pre { background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 1em; overflow-x: auto; font-size: 0.875rem; margin: 1.5em 0; border: 1px solid #1e293b; }
 .prose code { font-family: var(--font-mono); font-size: 0.875em; }
-.prose :not(pre) > code { background: #0f1728; padding: 0.15em 0.4em; border-radius: 4px; border: 1px solid var(--color-border); }
+.prose :not(pre) > code { background: #eff6ff; padding: 0.15em 0.4em; border-radius: 4px; border: 1px solid var(--color-border); }
 .prose blockquote { border-left: 3px solid var(--color-brand); padding-left: 1em; color: var(--color-text-secondary); margin: 1.5em 0; }
 .prose ul, .prose ol { padding-left: 1.5em; margin-bottom: 1em; }
 .prose li { margin-bottom: 0.25em; }
