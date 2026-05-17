@@ -52,7 +52,10 @@ h1, h2, h3, .brand-display { font-family: var(--font-display); letter-spacing: -
 }
 
 .radar-panel {
+  height: 100%;
   padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--color-border);
   border-radius: 1rem;
   background: linear-gradient(160deg, rgba(255,255,255,0.96), rgba(232,245,255,0.8));
@@ -61,42 +64,62 @@ h1, h2, h3, .brand-display { font-family: var(--font-display); letter-spacing: -
 
 .radar-grid {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  flex: 1;
+  min-height: 260px;
   position: relative;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(2,132,199,0.08) 0%, rgba(2,132,199,0.02) 58%, transparent 70%);
+  border-radius: 1.2rem;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.8), rgba(220,238,255,0.68)),
+    radial-gradient(circle at 50% 50%, rgba(2,132,199,0.08) 0%, rgba(2,132,199,0) 72%);
 }
 
-.radar-ring, .radar-axis, .radar-pulse, .radar-dot { position: absolute; }
-.radar-ring { inset: 0; margin: auto; border: 1px solid rgba(2,132,199,0.26); border-radius: 999px; }
-.radar-ring.r1 { width: 34%; height: 34%; }
-.radar-ring.r2 { width: 62%; height: 62%; }
-.radar-ring.r3 { width: 90%; height: 90%; }
+.radar-hex, .radar-dot, .radar-core, .radar-scan { position: absolute; }
 
-.radar-axis { left: 50%; top: 50%; width: 1px; height: 44%; transform-origin: top; background: rgba(2,132,199,0.25); }
-.radar-axis.a1 { transform: translate(-50%, -100%) rotate(0deg); }
-.radar-axis.a2 { transform: translate(-50%, -100%) rotate(120deg); }
-.radar-axis.a3 { transform: translate(-50%, -100%) rotate(240deg); }
+.radar-hex {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(25% 6.7%, 75% 6.7%, 100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%);
+  border: 1px solid rgba(2,132,199,0.3);
+}
 
-.radar-pulse {
-  inset: 0;
-  margin: auto;
-  width: 16%;
-  height: 16%;
+.radar-hex.h1 { width: 36%; height: 32%; background: rgba(2,132,199,0.04); }
+.radar-hex.h2 { width: 60%; height: 54%; background: rgba(2,132,199,0.03); }
+.radar-hex.h3 { width: 86%; height: 78%; background: rgba(2,132,199,0.02); }
+
+.radar-core {
+  left: 50%;
+  top: 50%;
+  width: 14%;
+  height: 14%;
+  transform: translate(-50%, -50%);
+  border-radius: 0.55rem;
+  border: 1px solid rgba(2,132,199,0.4);
+  background: linear-gradient(145deg, rgba(6,182,212,0.45), rgba(2,132,199,0.22));
+  box-shadow: 0 0 0 6px rgba(2,132,199,0.08);
+}
+
+.radar-scan {
+  left: 50%;
+  top: 50%;
+  width: 62%;
+  height: 62%;
+  transform: translate(-50%, -50%);
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(6,182,212,0.55) 0%, rgba(6,182,212,0) 70%);
-  animation: radarPulse 2.6s ease-in-out infinite;
+  background: conic-gradient(from 0deg, rgba(6,182,212,0.0), rgba(6,182,212,0.28), rgba(6,182,212,0.0) 35%);
+  animation: radarSweep 4.8s linear infinite;
 }
 
 .radar-dot { width: 8px; height: 8px; border-radius: 999px; background: #0284c7; box-shadow: 0 0 0 4px rgba(2,132,199,0.12); }
-.radar-dot.d1 { left: 51%; top: 19%; }
-.radar-dot.d2 { left: 78%; top: 49%; }
-.radar-dot.d3 { left: 28%; top: 70%; }
-.radar-dot.d4 { left: 19%; top: 43%; }
+.radar-dot.d1 { left: 50%; top: 24%; }
+.radar-dot.d2 { left: 68%; top: 47%; }
+.radar-dot.d3 { left: 39%; top: 63%; }
+.radar-dot.d4 { left: 26%; top: 48%; }
 
-@keyframes radarPulse {
-  0%, 100% { transform: scale(0.72); opacity: 0.7; }
-  50% { transform: scale(1); opacity: 1; }
+@keyframes radarSweep {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 .about-manifesto { position: relative; overflow: hidden; }
