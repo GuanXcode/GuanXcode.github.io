@@ -1,6 +1,7 @@
 ﻿---
 import Base from '../../layouts/Base.astro';
 import PostCard from '../../components/PostCard.astro';
+import SectionTitle from '../../components/SectionTitle.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = (await getCollection('blog'))
@@ -10,38 +11,33 @@ const allPosts = (await getCollection('blog'))
 const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
 ---
 
-<Base title="博客 - 木瓜匣AI">
+<Base title="时间线日志 - AI克塞号 / AI Kosei">
   <section class="py-16">
     <div class="max-w-3xl mx-auto px-6">
-      <h1 class="text-3xl font-bold tracking-tight mb-8">博客</h1>
+      <div class="mb-2">
+        <SectionTitle title="时间线日志" icon="log" />
+      </div>
+      <p class="text-sm text-[var(--color-text-secondary)] mb-8">记录 AI 工程任务的关键节点、方法与复盘。</p>
 
       {allTags.length > 0 && (
         <div class="flex flex-wrap gap-2 mb-10">
-          <a href="/blog/" class="text-sm px-3 py-1 rounded-full border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-colors">
-            全部
-          </a>
+          <a href="/blog/" class="text-sm px-3 py-1 rounded-full border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-colors">全部坐标</a>
           {allTags.map((tag) => (
-            <a href={`/blog/tag/${tag}/`} class="text-sm px-3 py-1 rounded-full border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-colors">
-              {tag}
-            </a>
+            <a href={`/blog/tag/${tag}/`} class="text-sm px-3 py-1 rounded-full border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-colors">{tag}</a>
           ))}
         </div>
       )}
 
       <div class="space-y-4">
-        {allPosts.length > 0 ? (
-          allPosts.map((post) => (
-            <PostCard
-              title={post.data.title}
-              excerpt={post.data.subtitle || post.body?.replace(/<[^>]*>/g, '').replace(/[#*>`\[\]()!]/g, '').trim().slice(0, 150)}
-              date={post.data.date}
-              tags={post.data.tags}
-              slug={post.id}
-            />
-          ))
-        ) : (
-          <p class="text-[var(--color-text-muted)]">暂无文章</p>
-        )}
+        {allPosts.length > 0 ? allPosts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            excerpt={post.data.subtitle || post.body?.replace(/<[^>]*>/g, '').replace(/[#*>`\[\]()!]/g, '').trim().slice(0, 150)}
+            date={post.data.date}
+            tags={post.data.tags}
+            slug={post.id}
+          />
+        )) : <p class="text-[var(--color-text-muted)]">暂无任务日志</p>}
       </div>
     </div>
   </section>

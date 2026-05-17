@@ -1,19 +1,17 @@
 ﻿---
 import Base from '../../../layouts/Base.astro';
 import PostCard from '../../../components/PostCard.astro';
+import SectionTitle from '../../../components/SectionTitle.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
   const allTags = [...new Set(posts.flatMap((p) => p.data.tags))];
-
   return allTags.map((tag) => ({
     params: { tag },
     props: {
       tag,
-      posts: posts
-        .filter((p) => p.data.tags.includes(tag) && !p.data.draft)
-        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+      posts: posts.filter((p) => p.data.tags.includes(tag) && !p.data.draft).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
     },
   }));
 }
@@ -21,22 +19,16 @@ export async function getStaticPaths() {
 const { tag, posts } = Astro.props;
 ---
 
-<Base title={`${tag} - 木瓜匣AI`}>
+<Base title={`${tag} - AI克塞号 / AI Kosei`}>
   <section class="py-16">
     <div class="max-w-3xl mx-auto px-6">
-      <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] transition-colors mb-8">
-        &larr; 全部文章
-      </a>
-      <h1 class="text-3xl font-bold tracking-tight mb-8">#{tag}</h1>
+      <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] transition-colors mb-6">&larr; 全部坐标</a>
+      <div class="mb-8">
+        <SectionTitle title={`标签坐标 #${tag}`} icon="tag" />
+      </div>
       <div class="space-y-4">
         {posts.map((post) => (
-          <PostCard
-            title={post.data.title}
-            excerpt={post.body?.slice(0, 150)}
-            date={post.data.date}
-            tags={post.data.tags}
-            slug={post.id}
-          />
+          <PostCard title={post.data.title} excerpt={post.body?.slice(0, 150)} date={post.data.date} tags={post.data.tags} slug={post.id} />
         ))}
       </div>
     </div>
