@@ -2,6 +2,7 @@
 export const prerender = false;
 
 import Base from '../../layouts/Base.astro';
+import ProfileHeader from '../../components/ProfileHeader.astro';
 import Skills from '../../components/Skills.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import WorkCard from '../../components/WorkCard.astro';
@@ -44,18 +45,7 @@ const skills = [
 ---
 
 <Base title="履历总览 - AI克塞号 / AI Kosei">
-  <section class="py-12 border-b border-[var(--color-border)]">
-    <div class="max-w-5xl mx-auto px-6 flex items-center gap-4">
-      {user.avatar && (
-        <img src={user.avatar} alt="" class="w-12 h-12 rounded-full border border-[var(--color-border)]" />
-      )}
-      <div>
-        <p class="text-sm text-[var(--color-text-muted)]">已授权访问</p>
-        <h1 class="text-xl font-bold">欢迎，{user.name}</h1>
-        <p class="text-sm text-[var(--color-text-secondary)]">@{user.login}</p>
-      </div>
-    </div>
-  </section>
+  <ProfileHeader user={user} />
 
   {experiences.length > 0 && (
     <section class="py-16">

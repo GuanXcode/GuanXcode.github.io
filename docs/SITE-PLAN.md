@@ -309,13 +309,13 @@ skills collection
 | GitHub OAuth + 白名单 | ✅ | 需配置 env + OAuth App |
 | 路由门禁 middleware | ✅ | — |
 | `/me` `/experience` `/projects` `/works` | ✅ 骨架 | 内容与 IA 未对齐目标 |
-| 公开/私密内容分离 | ⚠️ 部分 | 需：`works.visibility`、项目改摘要级、首页展示公开作品 |
-| middleware 路由 | ⚠️ 待调 | `/works` 需改为公开可访问（仅 public 条目） |
-| profile 集合 | ❌ | 个人信息仍散落组件硬编码 |
-| 经历时间线 UI | ❌ | 现为普通卡片 |
-| 作品详情页 | ❌ | 仅列表 |
+| 公开/私密内容分离 | ✅ | — |
+| middleware 路由 | ✅ | `/works` 公开，`/me` 等需登录 |
+| profile 集合 | ✅ | `src/content/profile/site.md` |
+| 经历时间线 UI | ✅ | `Timeline.astro` |
+| 作品详情页 | ✅ | `/works/[slug]` |
 | 真实经历/作品 Markdown | ❌ | 仍为 placeholder |
-| 域名 guanxcode.vip → Vercel | ❌ | 仍指向 GitHub Pages |
+| 域名 guanxcode.vip → Vercel | ✅ | 2026-05-31 已切换 |
 | 构建告警修复 | ⚠️ 本地已改 | 未 push |
 
 ---
@@ -330,30 +330,28 @@ skills collection
 - [x] 项目 vs 作品边界（v2）
 - [x] 界面用词：B（混合）
 
-### Phase 1 — 内容与 Schema（进行中）
+### Phase 1 — 内容与 Schema
 
-- [x] `works.visibility` + 公开/私密过滤
-- [x] `/works` 公开可访问；`/works/[slug]` 按条目鉴权
-- [x] `projects.designBrief` + 摘要级详情页
-- [x] `profile.publicBio` 供首页 About
-- [x] 文案 B 风格（SectionTitle 主/副标题）
-- [x] 首页：公开作品 + 博客摘要 + 履历登录 CTA
-- [x] `/me` 区块重排（经历 → 项目 → 作品 → 技能）
-- [ ] 真实 `experience` 内容（仍为 placeholder）
-- [ ] 真实 `works` / `projects` 文案定稿
+- [x] Schema、首页、`/me`、公开作品等（见上）
+- [ ] 真实 `experience` 内容（**你筹备中**）
+- [ ] 真实 `works` / `projects` 文案定稿（**你筹备中**）
 
-### Phase 2 — 页面重构
+### Phase 2 — 页面与组件（进行中）
 
-- [ ] 公开首页：方向 + 公开作品，无项目/经历
-- [ ] `/works`：公开/私密分轨展示
-- [ ] `/projects`：摘要级详情模板
-- [ ] `/me`、`/experience`：时间线与仪表盘
-- [ ] 按 §6.4 统一文案（待选 A/B/C）
+- [x] 公开首页：方向 + 公开作品 + 博客
+- [x] `/works` 公开/私密分轨
+- [x] `/projects` 摘要级详情
+- [x] `/experience` 时间线 UI（`Timeline.astro`）
+- [x] `/me` 仪表盘 + `ProfileHeader`
+- [x] 文案 B 风格（`SectionTitle` 主/副标题）
+- [x] Hero 读取 `profile.tagline`；登录页、DEPLOY 文档更新
+- [ ] 404 / 博客标签页等边角文案统一（可选）
 
 ### Phase 3 — 上线与运维（1 天）
 
 - [ ] Vercel 环境变量 + GitHub OAuth 回调
-- [ ] 域名切换至 Vercel，停用 GitHub Pages
+- [x] 域名切换至 Vercel（`guanxcode.vip`，2026-05-31）
+- [ ] 停用 GitHub Pages / 仓库 Pages 部署（避免冲突）
 - [ ] 白名单添加目标访客 GitHub 用户名
 - [ ] push 构建告警修复
 
@@ -399,6 +397,48 @@ skills collection
 
 ### blog
 
-- [ ] 现有文章是否全部 `draft: true` 直至正式发布？
+- [x] 现有文章全部公开
+
+---
+
+## 11. Markdown 填写模板（经历/作品筹备时用）
+
+### experience — `src/content/experience/<id>.md`
+
+```yaml
+---
+company: "（可脱敏代号）"
+role: "岗位"
+start: "2022-01"
+end: "至今"
+location: "城市（可选）"
+highlights:
+  - "可量化成果 1"
+  - "可量化成果 2"
+stack: [Java, Python]
+order: 1
+---
+
+正文：职责补充（避免客户名、内部系统名等敏感信息）。
+```
+
+### works — `src/content/works/<id>.md`
+
+```yaml
+---
+title: "作品名"
+description: "一句话"
+type: repo          # demo | design | talk | article | repo | other
+visibility: public  # public | private
+url: "https://..."
+order: 1
+---
+
+可选正文说明。
+```
+
+### projects — 仅改 frontmatter 中的 `description` 与 `designBrief` 即可
+
+---
 
 *本文档随规划迭代更新；实现以 `docs/SITE-PLAN.md` 为单一事实来源。*

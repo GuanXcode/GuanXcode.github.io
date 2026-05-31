@@ -22,9 +22,10 @@ const loginHref = `/auth/github?next=${encodeURIComponent(next)}`;
   <section class="py-24">
     <div class="max-w-md mx-auto px-6 text-center">
       <img src="/img/logo-kosei.svg" alt="" class="w-16 h-16 rounded-xl mx-auto mb-6 border border-[var(--color-border)]" />
-      <h1 class="text-2xl font-bold mb-3">GitHub 登录</h1>
+      <h1 class="text-2xl font-bold mb-1">登录</h1>
+      <p class="text-xs tracking-[0.14em] uppercase text-[var(--color-brand-light)] mb-4">授权访问</p>
       <p class="text-sm text-[var(--color-text-secondary)] mb-8 leading-relaxed">
-        职业经历、项目与作品仅对授权访客开放。请使用 GitHub 账号登录；通过白名单校验后即可访问。
+        职业经历与项目概要需 GitHub 白名单登录。公开作品与博客无需登录即可浏览。
       </p>
 
       {errorText && (

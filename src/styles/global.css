@@ -150,6 +150,21 @@ h1, h2, h3, .brand-display { font-family: var(--font-display); letter-spacing: -
 .prose th, .prose td { padding: 0.5em 0.75em; border: 1px solid var(--color-border); text-align: left; }
 .prose th { background: var(--color-bg-alt); font-weight: 600; }
 
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.timeline-item { display: grid; grid-template-columns: 1.5rem 1fr; gap: 1rem 1.25rem; padding-bottom: 2rem; }
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-axis { position: relative; display: flex; flex-direction: column; align-items: center; }
+.timeline-dot { width: 0.75rem; height: 0.75rem; border-radius: 999px; background: var(--color-brand); box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15); margin-top: 0.35rem; flex-shrink: 0; }
+.timeline-line { width: 2px; flex: 1; min-height: 1.5rem; margin-top: 0.35rem; background: linear-gradient(180deg, var(--color-brand), var(--color-border)); border-radius: 999px; }
+.timeline-body { min-width: 0; }
+
+.impact-list { list-style: none; padding: 0; margin: 0 0 0.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.impact-list li { position: relative; padding-left: 1rem; font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.6; }
+.impact-list li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 0.35rem; height: 0.35rem; border-radius: 999px; background: var(--color-brand-light); }
+
+.work-type-badge { font-size: 0.75rem; padding: 0.125rem 0.5rem; border-radius: 0.25rem; background: var(--color-bg-alt); color: var(--color-text-muted); }
+.work-type-badge--public { border: 1px solid rgba(2, 132, 199, 0.3); color: var(--color-brand); background: #f0f9ff; }
+
 .support-fab {
   position: fixed;
   right: 1.25rem;

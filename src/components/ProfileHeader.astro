@@ -1,0 +1,22 @@
+---
+import type { SessionUser } from '../lib/auth';
+
+interface Props {
+  user: SessionUser;
+}
+
+const { user } = Astro.props;
+---
+
+<section class="py-12 border-b border-[var(--color-border)]">
+  <div class="max-w-5xl mx-auto px-6 flex items-center gap-4">
+    {user.avatar && (
+      <img src={user.avatar} alt="" class="w-12 h-12 rounded-full border border-[var(--color-border)]" />
+    )}
+    <div>
+      <p class="text-xs tracking-[0.14em] uppercase text-[var(--color-brand-light)]">履历</p>
+      <h1 class="text-xl font-bold mt-0.5">欢迎，{user.name}</h1>
+      <p class="text-sm text-[var(--color-text-secondary)]">@{user.login} · 已授权访问</p>
+    </div>
+  </div>
+</section>
