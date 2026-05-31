@@ -1,0 +1,62 @@
+---
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+import SectionTitle from '../../components/SectionTitle.astro';
+import { getCollection, render } from 'astro:content';
+
+const experiences = (await getCollection('experience')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const experienceEntries = await Promise.all(
+  experiences.map(async (exp) => {
+    const { Content } = await render(exp);
+    return { exp, Content };
+  }),
+);
+---
+
+<Base title="职业经历 - AI克塞号 / AI Kosei">
+  <section class="py-16">
+    <div class="max-w-4xl mx-auto px-6">
+      <a href="/me/" class="inline-flex text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] mb-6">&larr; 返回履历总览</a>
+      <SectionTitle title="职业经历" icon="timeline" />
+      <p class="text-sm text-[var(--color-text-secondary)] mt-2 mb-10">完整任职时间线、职责与代表性成果（仅授权访客可见）。</p>
+
+      <div class="space-y-8">
+        {experienceEntries.map(({ exp, Content }) => (
+          <article class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm">
+            <header class="mb-4">
+              <div class="flex flex-wrap justify-between gap-2">
+                <h2 class="text-xl font-bold">{exp.data.company}</h2>
+                <span class="text-sm text-[var(--color-text-muted)]">
+                  {exp.data.start}{exp.data.end ? ` — ${exp.data.end}` : ''}
+                </span>
+              </div>
+              <p class="text-[var(--color-brand)] font-medium mt-1">{exp.data.role}</p>
+              {exp.data.location && (
+                <p class="text-sm text-[var(--color-text-muted)] mt-1">{exp.data.location}</p>
+              )}
+            </header>
+            {exp.data.highlights.length > 0 && (
+              <ul class="list-disc pl-5 text-sm text-[var(--color-text-secondary)] space-y-1 mb-4">
+                {exp.data.highlights.map((h) => <li>{h}</li>)}
+              </ul>
+            )}
+            {exp.data.stack.length > 0 && (
+              <div class="flex flex-wrap gap-1.5 mb-4">
+                {exp.data.stack.map((t) => (
+                  <span class="text-xs px-2 py-0.5 rounded bg-[var(--color-bg-alt)] text-[var(--color-text-muted)]">{t}</span>
+                ))}
+              </div>
+            )}
+            <div class="prose text-sm">
+              <Content />
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
