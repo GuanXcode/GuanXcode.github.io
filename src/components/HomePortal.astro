@@ -1,0 +1,94 @@
+---
+import { getCollection } from 'astro:content';
+import type { SessionUser } from '../lib/auth';
+
+interface Props {
+  user?: SessionUser;
+}
+
+const { user } = Astro.props;
+
+const profiles = await getCollection('profile');
+const profile = profiles[0]?.data;
+
+const tagline = profile?.tagline ?? '以工程化方法构建可生产的 AI 系统，专注场景化落地与高可靠架构实践';
+const publicBio = profile?.publicBio?.trim() ?? '';
+const manifesto = profile?.manifesto ?? '复杂在业务域生长，不在工具堆叠；架构师用设计原本承担担当、隔离技术、锚定演进';
+const heroNote = profile?.heroNote ?? '履历含经历与项目概要，点击后将引导 GitHub 授权。';
+const focusAreas = profile?.focusAreas ?? [];
+---
+
+<section class="home-portal">
+  <div class="max-w-5xl mx-auto px-6 py-12 md:py-16">
+    <div class="home-portal-grid">
+      <div class="home-portal-info">
+        <div class="flex items-center gap-3 mb-6">
+          <img src="/img/logo-kosei.svg" alt="" class="w-10 h-10 rounded-lg border border-[var(--color-border)] shadow-sm" />
+          <span class="brand-display font-bold text-lg text-[var(--color-text)]">AI Kosei</span>
+        </div>
+
+        <h1 class="text-2xl md:text-3xl font-bold leading-snug text-[var(--color-text)] mb-4">
+          {tagline}
+        </h1>
+
+        {publicBio && (
+          <p class="text-sm md:text-base text-[var(--color-text-secondary)] leading-relaxed mb-5 whitespace-pre-line max-w-xl">
+            {publicBio}
+          </p>
+        )}
+
+        {focusAreas.length > 0 && (
+          <div class="flex flex-wrap gap-2 mb-6">
+            {focusAreas.map((area) => (
+              <span class="text-xs px-2.5 py-1 rounded-full border border-[var(--color-border)] bg-white/80 text-[var(--color-text-muted)]">
+                {area}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <p class="home-manifesto-line">{manifesto}</p>
+      </div>
+
+      <aside class="home-portal-actions">
+        {user ? (
+          <>
+            <div class="flex items-center gap-3 mb-5 pb-5 border-b border-[var(--color-border)]">
+              {user.avatar && (
+                <img src={user.avatar} alt="" class="w-10 h-10 rounded-full border border-[var(--color-border)]" />
+              )}
+              <div>
+                <p class="text-xs text-[var(--color-text-muted)]">已授权</p>
+                <p class="text-sm font-semibold">{user.name}</p>
+              </div>
+            </div>
+            <a href="/me/" class="home-portal-btn home-portal-btn--primary">
+              进入履历总览
+            </a>
+          </>
+        ) : (
+          <>
+            <a href="/me/" class="home-portal-btn home-portal-btn--primary">
+              查看履历
+            </a>
+            <p class="text-xs text-[var(--color-text-muted)] mt-3 leading-relaxed">{heroNote}</p>
+          </>
+        )}
+
+        <div class="home-portal-btn-row">
+          <a href="/works/" class="home-portal-btn home-portal-btn--secondary">作品</a>
+          <a href="/blog/" class="home-portal-btn home-portal-btn--secondary">博客</a>
+        </div>
+
+        <a
+          href="https://github.com/GuanXcode"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="home-portal-link"
+        >
+          GitHub &rarr;
+        </a>
+      </aside>
+    </div>
+  </div>
+</section>

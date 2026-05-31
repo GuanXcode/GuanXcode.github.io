@@ -64,6 +64,8 @@ const profile = defineCollection({
     tagline: z.string(),
     publicBio: z.string(),
     focusAreas: z.array(z.string()).default([]),
+    manifesto: z.string().optional(),
+    heroNote: z.string().optional(),
   }),
 });
 

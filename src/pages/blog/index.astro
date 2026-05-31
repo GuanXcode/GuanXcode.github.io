@@ -11,7 +11,7 @@ const allPosts = (await getCollection('blog'))
 const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
 ---
 
-<Base title="博客 - AI克塞号 / AI Kosei">
+<Base title="博客 - AI Kosei">
   <section class="py-16">
     <div class="max-w-4xl mx-auto px-6">
       <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm mb-8">

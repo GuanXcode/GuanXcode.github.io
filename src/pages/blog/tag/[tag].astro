@@ -12,7 +12,7 @@ const posts = (await getCollection('blog'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
-<Base title={`${tag} - AI克塞号 / AI Kosei`}>
+<Base title={`${tag} - AI Kosei`}>
   <section class="py-16">
     <div class="max-w-4xl mx-auto px-6">
       <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] transition-colors mb-4">&larr; 全部坐标</a>
