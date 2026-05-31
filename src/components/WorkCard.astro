@@ -1,0 +1,30 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  type: string;
+  slug?: string;
+  url?: string;
+  publicBadge?: boolean;
+}
+
+const { title, description, type, slug, url, publicBadge } = Astro.props;
+const href = slug ? `/works/${slug}/` : url;
+---
+
+<article class="group p-5 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] hover:shadow-md transition-all h-full flex flex-col">
+  <div class="flex items-start justify-between gap-2 mb-2">
+    <span class="text-xs px-2 py-0.5 rounded bg-[var(--color-bg-alt)] text-[var(--color-text-muted)]">{type}</span>
+    {publicBadge && (
+      <span class="text-xs px-2 py-0.5 rounded border border-[var(--color-brand)]/30 text-[var(--color-brand)]">公开</span>
+    )}
+  </div>
+  <h3 class="font-semibold text-base mb-2 group-hover:text-[var(--color-brand)] transition-colors">
+    {href ? (
+      <a href={href} target={url && !slug ? '_blank' : undefined} rel={url && !slug ? 'noopener noreferrer' : undefined} class="hover:underline">
+        {title}
+      </a>
+    ) : title}
+  </h3>
+  <p class="text-sm text-[var(--color-text-secondary)] flex-1">{description}</p>
+</article>

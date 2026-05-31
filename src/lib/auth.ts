@@ -158,7 +158,7 @@ export async function exchangeGitHubCode(
   };
 }
 
-export const PROTECTED_PREFIXES = ['/me', '/experience', '/projects', '/works'];
+export const PROTECTED_PREFIXES = ['/me', '/experience', '/projects'];
 
 export function isProtectedPath(pathname: string): boolean {
   return PROTECTED_PREFIXES.some(

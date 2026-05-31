@@ -11,19 +11,17 @@ const allPosts = (await getCollection('blog'))
 const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
 ---
 
-<Base title="时间线日志 - AI克塞号 / AI Kosei">
+<Base title="博客 - AI克塞号 / AI Kosei">
   <section class="py-16">
     <div class="max-w-4xl mx-auto px-6">
       <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm mb-8">
-        <div class="mb-2">
-          <SectionTitle title="时间线日志" icon="log" />
-        </div>
-        <p class="text-sm text-[var(--color-text-secondary)]">记录 AI 工程任务的关键节点、方法与复盘。</p>
+        <SectionTitle title="博客" subtitle="时间线日志" icon="log" />
+        <p class="text-sm text-[var(--color-text-secondary)] mt-2 pl-9">记录 AI 工程任务的关键节点、方法与复盘。</p>
       </div>
 
       {allTags.length > 0 && (
         <div class="flex flex-wrap gap-2 mb-8">
-          <a href="/blog/" class="text-sm px-3 py-1 rounded-full border border-[var(--color-border)] bg-white text-[var(--color-text-secondary)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-colors">全部坐标</a>
+          <a href="/blog/" class="text-sm px-3 py-1 rounded-full border border-[var(--color-border)] bg-white text-[var(--color-text-secondary)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-colors">全部</a>
           {allTags.map((tag) => (
             <a href={`/blog/tag/${tag}/`} class="text-sm px-3 py-1 rounded-full border border-[var(--color-border)] bg-white text-[var(--color-text-secondary)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-colors">{tag}</a>
           ))}

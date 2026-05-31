@@ -4,16 +4,11 @@ export const prerender = false;
 import Base from '../../layouts/Base.astro';
 import Skills from '../../components/Skills.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
-import PostCard from '../../components/PostCard.astro';
+import WorkCard from '../../components/WorkCard.astro';
 import SectionTitle from '../../components/SectionTitle.astro';
 import { getCollection } from 'astro:content';
 
 const user = Astro.locals.user!;
-
-const allPosts = (await getCollection('blog'))
-  .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const recentPosts = allPosts.slice(0, 3);
 
 const allProjects = (await getCollection('projects')).sort(
   (a, b) => a.data.order - b.data.order,
@@ -25,6 +20,20 @@ const displayProjects =
 const experiences = (await getCollection('experience')).sort(
   (a, b) => a.data.order - b.data.order,
 );
+
+const privateWorks = (await getCollection('works'))
+  .filter((w) => w.data.visibility === 'private')
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const typeLabels: Record<string, string> = {
+  demo: 'Demo',
+  design: '设计',
+  talk: '演讲',
+  article: '文章',
+  repo: '仓库',
+  other: '其他',
+};
 
 const skills = [
   { title: '架构设计', items: ['分布式系统', '微服务架构', '领域驱动设计 (DDD)', '系统建模'] },
@@ -48,39 +57,14 @@ const skills = [
     </div>
   </section>
 
-  <section id="skills" class="py-20">
-    <div class="max-w-5xl mx-auto px-6">
-      <div class="mb-8 flex items-center justify-between">
-        <SectionTitle title="能力坐标" icon="skills" />
-        <a href="/experience/" class="text-sm text-[var(--color-brand)] hover:underline">完整经历 &rarr;</a>
-      </div>
-      <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-stretch">
-        <aside class="radar-panel">
-          <div class="radar-grid">
-            <span class="radar-hex h1"></span>
-            <span class="radar-hex h2"></span>
-            <span class="radar-hex h3"></span>
-            <span class="radar-scan"></span>
-            <span class="radar-core"></span>
-            <span class="radar-dot d1"></span>
-            <span class="radar-dot d2"></span>
-            <span class="radar-dot d3"></span>
-            <span class="radar-dot d4"></span>
-          </div>
-          <p class="text-xs text-[var(--color-text-secondary)] mt-4">能力矩阵在线校准中</p>
-        </aside>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 h-full">
-          {skills.map((s, i) => <Skills title={s.title} items={s.items} index={i} />)}
-        </div>
-      </div>
-    </div>
-  </section>
-
   {experiences.length > 0 && (
-    <section class="py-16 bg-[var(--color-bg-alt)]">
+    <section class="py-16">
       <div class="max-w-5xl mx-auto px-6">
-        <SectionTitle title="职业经历摘要" icon="timeline" />
-        <ul class="mt-6 space-y-4">
+        <div class="flex items-center justify-between mb-6">
+          <SectionTitle title="经历" subtitle="职业时间线" icon="timeline" />
+          <a href="/experience/" class="text-sm text-[var(--color-brand)] hover:underline">完整经历 &rarr;</a>
+        </div>
+        <ul class="space-y-4">
           {experiences.slice(0, 2).map((exp) => (
             <li class="p-5 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)]">
               <div class="flex flex-wrap justify-between gap-2 mb-1">
@@ -101,10 +85,10 @@ const skills = [
   )}
 
   {displayProjects.length > 0 && (
-    <section id="projects" class="py-20">
+    <section id="projects" class="py-16 bg-[var(--color-bg-alt)]">
       <div class="max-w-5xl mx-auto px-6">
         <div class="flex items-center justify-between mb-8">
-          <SectionTitle title="任务编队" icon="projects" />
+          <SectionTitle title="项目" subtitle="任务编队 · 概要" icon="projects" />
           <a href="/projects/" class="text-sm text-[var(--color-brand)] hover:underline">全部项目 &rarr;</a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -114,7 +98,6 @@ const skills = [
                 title={project.data.title}
                 description={project.data.description}
                 tech={project.data.tech}
-                url={project.data.url}
                 image={project.data.image}
               />
             </a>
@@ -124,25 +107,49 @@ const skills = [
     </section>
   )}
 
-  {recentPosts.length > 0 && (
-    <section class="py-20 bg-[var(--color-bg-alt)]">
+  {privateWorks.length > 0 && (
+    <section class="py-16">
       <div class="max-w-5xl mx-auto px-6">
         <div class="flex items-center justify-between mb-8">
-          <SectionTitle title="时间线日志" icon="timeline" />
-          <a href="/blog/" class="text-sm text-[var(--color-brand)] hover:underline">全部文章 &rarr;</a>
+          <SectionTitle title="作品" subtitle="仅授权可见" icon="works" />
+          <a href="/works/" class="text-sm text-[var(--color-brand)] hover:underline">全部作品 &rarr;</a>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {recentPosts.map((post) => (
-            <PostCard
-              title={post.data.title}
-              excerpt={post.data.subtitle || post.body?.replace(/<[^>]*>/g, '').replace(/[#*>`\[\]()!]/g, '').trim().slice(0, 120)}
-              date={post.data.date}
-              tags={post.data.tags}
-              slug={post.id}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {privateWorks.map((work) => (
+            <WorkCard
+              title={work.data.title}
+              description={work.data.description}
+              type={typeLabels[work.data.type] ?? work.data.type}
+              slug={work.id}
             />
           ))}
         </div>
       </div>
     </section>
   )}
+
+  <section id="skills" class="py-20 bg-[var(--color-bg-alt)]">
+    <div class="max-w-5xl mx-auto px-6">
+      <SectionTitle title="技能" subtitle="能力坐标" icon="skills" />
+      <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-stretch mt-8">
+        <aside class="radar-panel">
+          <div class="radar-grid">
+            <span class="radar-hex h1"></span>
+            <span class="radar-hex h2"></span>
+            <span class="radar-hex h3"></span>
+            <span class="radar-scan"></span>
+            <span class="radar-core"></span>
+            <span class="radar-dot d1"></span>
+            <span class="radar-dot d2"></span>
+            <span class="radar-dot d3"></span>
+            <span class="radar-dot d4"></span>
+          </div>
+          <p class="text-xs text-[var(--color-text-secondary)] mt-4">能力矩阵在线校准中</p>
+        </aside>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 h-full">
+          {skills.map((s, i) => <Skills title={s.title} items={s.items} index={i} />)}
+        </div>
+      </div>
+    </div>
+  </section>
 </Base>

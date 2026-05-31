@@ -5,15 +5,31 @@ import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
 import PostCard from '../components/PostCard.astro';
+import WorkCard from '../components/WorkCard.astro';
 import SectionTitle from '../components/SectionTitle.astro';
 import { getCollection } from 'astro:content';
+import { filterVisibleWorks } from '../lib/content';
 
 const user = Astro.locals.user;
+const isAuthed = Boolean(user);
 
 const allPosts = (await getCollection('blog'))
   .filter((p) => !p.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const recentPosts = allPosts.slice(0, 3);
+
+const typeLabels: Record<string, string> = {
+  demo: 'Demo',
+  design: '设计',
+  talk: '演讲',
+  article: '文章',
+  repo: '仓库',
+  other: '其他',
+};
+
+const publicWorks = filterVisibleWorks(await getCollection('works'), isAuthed)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
 ---
 
 <Base title="AI克塞号 / AI Kosei">
@@ -21,12 +37,35 @@ const recentPosts = allPosts.slice(0, 3);
 
   <About />
 
-  {!user && (
+  {publicWorks.length > 0 && (
     <section class="py-16">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="flex items-center justify-between mb-8">
+          <SectionTitle title="作品" subtitle="公开展示" icon="works" />
+          <a href="/works/" class="text-sm text-[var(--color-brand)] hover:underline">全部作品 &rarr;</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {publicWorks.map((work) => (
+            <WorkCard
+              title={work.data.title}
+              description={work.data.description}
+              type={typeLabels[work.data.type] ?? work.data.type}
+              slug={work.id}
+              url={work.data.url}
+              publicBadge={work.data.visibility === 'public'}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {!user && (
+    <section class="py-16 bg-[var(--color-bg-alt)]">
       <div class="max-w-3xl mx-auto px-6 text-center rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-8 md:p-10 shadow-sm">
-        <SectionTitle title="授权访问" icon="skills" />
+        <SectionTitle title="履历" subtitle="授权访问" icon="skills" />
         <p class="text-sm text-[var(--color-text-secondary)] mt-4 mb-6 leading-relaxed">
-          完整职业经历、项目细节与作品陈列仅对 GitHub 白名单访客开放。技术博客保持公开阅读。
+          职业经历与项目概要仅对 GitHub 白名单访客开放。公开作品与博客无需登录。
         </p>
         <a
           href="/login"
@@ -41,7 +80,7 @@ const recentPosts = allPosts.slice(0, 3);
   {user && (
     <section class="py-12">
       <div class="max-w-3xl mx-auto px-6 text-center">
-        <p class="text-sm text-[var(--color-text-secondary)] mb-4">你已登录，可查看完整履历。</p>
+        <p class="text-sm text-[var(--color-text-secondary)] mb-4">你已登录，可查看完整履历与项目概要。</p>
         <a href="/me/" class="inline-flex px-5 py-2.5 rounded-lg border border-[var(--color-brand)] text-[var(--color-brand)] text-sm hover:bg-[var(--color-brand)] hover:text-white transition-colors">
           进入履历总览 &rarr;
         </a>
@@ -50,10 +89,10 @@ const recentPosts = allPosts.slice(0, 3);
   )}
 
   {recentPosts.length > 0 && (
-    <section class="py-20 bg-[var(--color-bg-alt)]">
+    <section class="py-20">
       <div class="max-w-5xl mx-auto px-6">
         <div class="flex items-center justify-between mb-8">
-          <SectionTitle title="时间线日志" icon="timeline" />
+          <SectionTitle title="博客" subtitle="时间线日志" icon="log" />
           <a href="/blog/" class="text-sm text-[var(--color-brand)] hover:underline">全部文章 &rarr;</a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

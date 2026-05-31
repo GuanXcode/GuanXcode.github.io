@@ -20,8 +20,10 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
+    designBrief: z.string().optional(),
     tech: z.array(z.string()),
     role: z.string().optional(),
+    period: z.string().optional(),
     url: z.string().optional(),
     image: z.string().optional(),
     featured: z.boolean().default(false),
@@ -49,10 +51,20 @@ const works = defineCollection({
     title: z.string(),
     description: z.string(),
     type: z.enum(['demo', 'design', 'talk', 'article', 'repo', 'other']).default('other'),
+    visibility: z.enum(['public', 'private']).default('private'),
     url: z.string().optional(),
     image: z.string().optional(),
     order: z.number().default(0),
   }),
 });
 
-export const collections = { blog, projects, experience, works };
+const profile = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/profile' }),
+  schema: z.object({
+    tagline: z.string(),
+    publicBio: z.string(),
+    focusAreas: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { blog, projects, experience, works, profile };

@@ -4,19 +4,12 @@ import PostCard from '../../../components/PostCard.astro';
 import SectionTitle from '../../../components/SectionTitle.astro';
 import { getCollection } from 'astro:content';
 
-export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  const allTags = [...new Set(posts.flatMap((p) => p.data.tags))];
-  return allTags.map((tag) => ({
-    params: { tag },
-    props: {
-      tag,
-      posts: posts.filter((p) => p.data.tags.includes(tag) && !p.data.draft).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
-    },
-  }));
-}
+const { tag } = Astro.params;
+if (!tag) return Astro.redirect('/blog');
 
-const { tag, posts } = Astro.props;
+const posts = (await getCollection('blog'))
+  .filter((p) => p.data.tags.includes(tag) && !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
 <Base title={`${tag} - AI克塞号 / AI Kosei`}>
@@ -27,7 +20,7 @@ const { tag, posts } = Astro.props;
         <SectionTitle title={`标签坐标 #${tag}`} icon="tag" />
       </div>
       <div class="space-y-4">
-        {posts.map((post) => (
+        {posts.length > 0 ? posts.map((post) => (
           <PostCard
             title={post.data.title}
             excerpt={post.data.subtitle || post.body?.replace(/<[^>]*>/g, '').replace(/[#*>`\[\]()!]/g, '').trim().slice(0, 150)}
@@ -35,7 +28,7 @@ const { tag, posts } = Astro.props;
             tags={post.data.tags}
             slug={post.id}
           />
-        ))}
+        )) : <p class="text-[var(--color-text-muted)]">该标签下暂无文章</p>}
       </div>
     </div>
   </section>

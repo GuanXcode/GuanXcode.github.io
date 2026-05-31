@@ -1,9 +1,9 @@
 ---
-title: "示例作品（请替换）"
-description: "可放置设计稿、演讲、开源仓库或 Demo 链接。"
-type: repo
-url: "https://github.com/GuanXcode"
-order: 1
+title: "示例作品（请替换 · 私密）"
+description: "可放置未公开的设计稿、内部 Demo 或合作材料。"
+type: other
+visibility: private
+order: 99
 ---
 
-在此撰写作品说明、创作背景与你的个人贡献。
+登录后在作品库中可见。撰写时请避免敏感信息。

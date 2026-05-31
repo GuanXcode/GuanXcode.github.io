@@ -1,25 +1,40 @@
 ﻿---
+import { getCollection } from 'astro:content';
+
+const profiles = await getCollection('profile');
+const profile = profiles[0]?.data;
 ---
 
 <section id="about" class="py-20 bg-[var(--color-bg-alt)]">
   <div class="max-w-5xl mx-auto px-6">
     <div class="about-panel">
-      <h2 class="text-2xl font-bold tracking-tight mb-6">站点设定</h2>
+      <h2 class="text-2xl font-bold tracking-tight mb-1">关于</h2>
+      <p class="text-xs tracking-[0.18em] uppercase text-[var(--color-brand-light)] mb-6">站点设定</p>
 
-      <p class="about-solo mb-6">
-        以时间感知驱动智能工程
-      </p>
+      {profile?.tagline && (
+        <p class="about-solo mb-6">{profile.tagline}</p>
+      )}
 
       <blockquote class="border-l-3 border-[var(--color-brand)] pl-5 text-[var(--color-text-secondary)] text-lg mb-6 about-manifesto">
         <span class="manifesto-signal">CORE SIGNAL</span>
         <span class="manifesto-text">复杂性永远来自真实业务，而工程师的任务是为复杂系统建立可执行的时间坐标。</span>
       </blockquote>
 
-      <p class="text-[var(--color-text-secondary)] leading-relaxed max-w-3xl">
-        <strong class="text-[var(--color-text)]">AI克塞号 / AI Kosei</strong> 是我的个人工程站点。
-        这里记录 AI 场景化落地、系统架构演进、以及从问题到交付的完整任务日志。
-        我关注的核心是 <span class="about-keyword">高可靠性</span>、<span class="about-keyword">可维护性</span> 和 <span class="about-keyword">可迭代速度</span>。
-      </p>
+      {profile?.publicBio && (
+        <p class="text-[var(--color-text-secondary)] leading-relaxed max-w-3xl whitespace-pre-line">
+          {profile.publicBio.trim()}
+        </p>
+      )}
+
+      {profile?.focusAreas && profile.focusAreas.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-6">
+          {profile.focusAreas.map((area) => (
+            <span class="text-xs px-2.5 py-1 rounded-full border border-[var(--color-border)] bg-white text-[var(--color-text-muted)]">
+              {area}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   </div>
 </section>

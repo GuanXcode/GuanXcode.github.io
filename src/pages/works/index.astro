@@ -2,16 +2,16 @@
 export const prerender = false;
 
 import Base from '../../layouts/Base.astro';
+import WorkCard from '../../components/WorkCard.astro';
 import SectionTitle from '../../components/SectionTitle.astro';
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
+import { filterVisibleWorks } from '../../lib/content';
 
-const worksList = (await getCollection('works')).sort((a, b) => a.data.order - b.data.order);
+const user = Astro.locals.user;
+const isAuthed = Boolean(user);
 
-const workEntries = await Promise.all(
-  worksList.map(async (work) => {
-    const { Content } = await render(work);
-    return { work, Content };
-  }),
+const worksList = filterVisibleWorks(await getCollection('works'), isAuthed).sort(
+  (a, b) => a.data.order - b.data.order,
 );
 
 const typeLabels: Record<string, string> = {
@@ -22,42 +22,45 @@ const typeLabels: Record<string, string> = {
   repo: '仓库',
   other: '其他',
 };
+
+const backHref = isAuthed ? '/me/' : '/';
+const backLabel = isAuthed ? '返回履历总览' : '返回首页';
 ---
 
 <Base title="作品 - AI克塞号 / AI Kosei">
   <section class="py-16">
     <div class="max-w-4xl mx-auto px-6">
-      <a href="/me/" class="inline-flex text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] mb-6">&larr; 返回履历总览</a>
-      <SectionTitle title="作品陈列" icon="projects" />
-      <p class="text-sm text-[var(--color-text-secondary)] mt-2 mb-10">设计、Demo、演讲与仓库等个人作品（仅授权访客可见）。</p>
+      <a href={backHref} class="inline-flex text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] mb-6">&larr; {backLabel}</a>
+      <SectionTitle title="作品" subtitle={isAuthed ? '全部作品' : '公开展示'} icon="works" />
+      <p class="text-sm text-[var(--color-text-secondary)] mt-2 mb-10">
+        {isAuthed
+          ? '含公开与仅授权可见的作品条目。'
+          : '以下为公开作品。登录后可查看完整作品库。'}
+      </p>
 
-      <div class="space-y-6">
-        {workEntries.map(({ work, Content }) => (
-          <article class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm">
-            <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
-              <h2 class="text-lg font-bold">
-                {work.data.url ? (
-                  <a href={work.data.url} target="_blank" rel="noopener noreferrer" class="hover:text-[var(--color-brand)]">
-                    {work.data.title}
-                  </a>
-                ) : (
-                  work.data.title
-                )}
-              </h2>
-              <span class="text-xs px-2 py-0.5 rounded bg-[var(--color-bg-alt)] text-[var(--color-text-muted)]">
-                {typeLabels[work.data.type] ?? work.data.type}
-              </span>
-            </div>
-            <p class="text-sm text-[var(--color-text-secondary)] mb-4">{work.data.description}</p>
-            {work.data.image && (
-              <img src={work.data.image} alt="" class="w-full max-h-64 object-cover rounded-lg mb-4 border border-[var(--color-border)]" />
-            )}
-            <div class="prose text-sm">
-              <Content />
-            </div>
-          </article>
-        ))}
-      </div>
+      {worksList.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {worksList.map((work) => (
+            <WorkCard
+              title={work.data.title}
+              description={work.data.description}
+              type={typeLabels[work.data.type] ?? work.data.type}
+              slug={work.id}
+              url={work.data.url}
+              publicBadge={work.data.visibility === 'public'}
+            />
+          ))}
+        </div>
+      ) : (
+        <p class="text-[var(--color-text-muted)]">暂无公开展示的作品。</p>
+      )}
+
+      {!isAuthed && (
+        <p class="text-sm text-[var(--color-text-muted)] mt-8">
+          <a href="/login?next=/works/" class="text-[var(--color-brand)] hover:underline">登录</a>
+          {' '}查看完整作品库。
+        </p>
+      )}
     </div>
   </section>
 </Base>
