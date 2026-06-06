@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1020" viewBox="0 0 1440 1020" role="img" aria-labelledby="title desc">
+  <title id="title">微服务架构图</title>
+  <desc id="desc">典型微服务系统架构图，包含客户端、网关、服务治理、业务服务、数据中间件、可观测性和 DevOps。</desc>
+  <defs>
+    <style>
+      .bg{fill:#f6f8fb}.box{fill:#fff;stroke:#d7dee9;stroke-width:1.4}.client{fill:#eaf7f0;stroke:#56a87a}.edge{fill:#edf3ff;stroke:#5f86d6}.svc{fill:#fff8e8;stroke:#d79c38}.data{fill:#f2eefc;stroke:#8a6bd4}.bus{fill:#fff4ee;stroke:#d27a42}.ops{fill:#eff8fb;stroke:#58a3b5}.dev{fill:#fdf0f2;stroke:#cf6d7a}.title{font:700 34px Arial,"PingFang SC","Microsoft YaHei",sans-serif;fill:#1c2635}.sub{font:400 16px Arial,"PingFang SC","Microsoft YaHei",sans-serif;fill:#5b6675}.h{font:700 18px Arial,"PingFang SC","Microsoft YaHei",sans-serif;fill:#263244}.t{font:700 15px Arial,"PingFang SC","Microsoft YaHei",sans-serif;fill:#243044}.s{font:400 12px Arial,"PingFang SC","Microsoft YaHei",sans-serif;fill:#657184}.a{fill:none;stroke:#6f7c8f;stroke-width:2;marker-end:url(#arrow)}.d{fill:none;stroke:#c46f39;stroke-width:2;stroke-dasharray:7 5;marker-end:url(#event)}
+    </style>
+    <marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto"><path d="M0,0 L10,5.5 L0,11 Z" fill="#6f7c8f"/></marker>
+    <marker id="event" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto"><path d="M0,0 L10,5.5 L0,11 Z" fill="#c46f39"/></marker>
+  </defs>
+
+  <rect class="bg" width="1440" height="1020"/>
+  <text class="title" x="72" y="68">微服务架构图</text>
+  <text class="sub" x="72" y="98">面向高可用、可观测、可独立发布的业务系统参考架构</text>
+
+  <rect class="box" x="64" y="135" width="360" height="380" rx="12"/>
+  <text class="h" x="104" y="176">客户端</text>
+  <rect class="client" x="112" y="210" width="264" height="64" rx="9"/><text class="t" x="210" y="249">Web App</text>
+  <rect class="client" x="112" y="320" width="264" height="64" rx="9"/><text class="t" x="201" y="359">Mobile App</text>
+  <rect class="client" x="112" y="430" width="264" height="64" rx="9"/><text class="t" x="208" y="469">Open API</text>
+
+  <rect class="box" x="548" y="135" width="360" height="380" rx="12"/>
+  <text class="h" x="588" y="176">边缘入口层</text>
+  <rect class="edge" x="596" y="210" width="264" height="64" rx="9"/><text class="t" x="690" y="249">DNS / CDN</text>
+  <rect class="edge" x="596" y="320" width="264" height="64" rx="9"/><text class="t" x="685" y="359">WAF / 网关</text>
+  <rect class="edge" x="596" y="430" width="264" height="64" rx="9"/><text class="t" x="681" y="469">API Gateway</text>
+
+  <rect class="box" x="972" y="135" width="364" height="380" rx="12"/>
+  <text class="h" x="1012" y="176">服务治理与运行时</text>
+  <rect class="edge" x="1012" y="210" width="132" height="64" rx="9"/><text class="t" x="1041" y="235">服务网格</text><text class="s" x="1036" y="255">mTLS / 流量</text>
+  <rect class="edge" x="1164" y="210" width="132" height="64" rx="9"/><text class="t" x="1194" y="235">注册发现</text><text class="s" x="1196" y="255">Consul</text>
+  <rect class="edge" x="1012" y="320" width="132" height="64" rx="9"/><text class="t" x="1048" y="345">认证授权</text><text class="s" x="1040" y="365">OAuth2 / JWT</text>
+  <rect class="edge" x="1164" y="320" width="132" height="64" rx="9"/><text class="t" x="1194" y="345">限流熔断</text><text class="s" x="1196" y="365">Circuit</text>
+  <rect class="edge" x="1012" y="430" width="132" height="64" rx="9"/><text class="t" x="1048" y="455">配置中心</text><text class="s" x="1042" y="475">动态配置</text>
+  <rect class="edge" x="1164" y="430" width="132" height="64" rx="9"/><text class="t" x="1194" y="455">负载均衡</text><text class="s" x="1198" y="475">Canary</text>
+
+  <rect class="box" x="64" y="548" width="890" height="296" rx="12"/>
+  <text class="h" x="104" y="588">业务微服务层</text>
+  <rect class="svc" x="104" y="618" width="148" height="68" rx="9"/><text class="t" x="132" y="648">用户服务</text><text class="s" x="132" y="666">账户 / 权限</text>
+  <rect class="svc" x="284" y="618" width="148" height="68" rx="9"/><text class="t" x="312" y="648">订单服务</text><text class="s" x="312" y="666">下单 / 状态机</text>
+  <rect class="svc" x="464" y="618" width="148" height="68" rx="9"/><text class="t" x="492" y="648">商品服务</text><text class="s" x="492" y="666">SKU / 库存视图</text>
+  <rect class="svc" x="644" y="618" width="148" height="68" rx="9"/><text class="t" x="672" y="648">支付服务</text><text class="s" x="672" y="666">交易 / 对账</text>
+  <rect class="svc" x="104" y="728" width="148" height="68" rx="9"/><text class="t" x="132" y="758">库存服务</text><text class="s" x="132" y="776">扣减 / 预占</text>
+  <rect class="svc" x="284" y="728" width="148" height="68" rx="9"/><text class="t" x="312" y="758">营销服务</text><text class="s" x="312" y="776">优惠 / 活动</text>
+  <rect class="svc" x="464" y="728" width="148" height="68" rx="9"/><text class="t" x="492" y="758">通知服务</text><text class="s" x="492" y="776">短信 / 邮件</text>
+  <rect class="svc" x="644" y="728" width="148" height="68" rx="9"/><text class="t" x="672" y="758">风控服务</text><text class="s" x="672" y="776">规则 / 模型</text>
+  <rect class="box" x="828" y="634" width="84" height="126" rx="9"/><text class="s" x="848" y="666">独立部署</text><text class="s" x="848" y="696">独立扩缩</text><text class="s" x="848" y="726">独立数据</text>
+
+  <rect class="box" x="1008" y="548" width="328" height="296" rx="12"/>
+  <text class="h" x="1048" y="588">数据与中间件</text>
+  <rect class="data" x="1048" y="618" width="112" height="62" rx="9"/><text class="t" x="1078" y="644">MySQL</text><text class="s" x="1076" y="662">按服务拆库</text>
+  <rect class="data" x="1190" y="618" width="112" height="62" rx="9"/><text class="t" x="1224" y="644">Redis</text><text class="s" x="1218" y="662">缓存 / 锁</text>
+  <rect class="bus" x="1048" y="718" width="112" height="62" rx="9"/><text class="t" x="1080" y="744">Kafka</text><text class="s" x="1075" y="762">事件总线</text>
+  <rect class="data" x="1190" y="718" width="112" height="62" rx="9"/><text class="t" x="1216" y="744">对象存储</text><text class="s" x="1218" y="762">文件 / 图片</text>
+
+  <rect class="box" x="64" y="908" width="584" height="78" rx="12"/>
+  <text class="h" x="104" y="940">可观测性</text>
+  <rect class="ops" x="228" y="924" width="96" height="44" rx="9"/><text class="t" x="248" y="952">日志</text>
+  <rect class="ops" x="348" y="924" width="96" height="44" rx="9"/><text class="t" x="368" y="952">指标</text>
+  <rect class="ops" x="468" y="924" width="96" height="44" rx="9"/><text class="t" x="488" y="952">链路</text>
+
+  <rect class="box" x="704" y="908" width="632" height="78" rx="12"/>
+  <text class="h" x="744" y="940">DevOps / 平台工程</text>
+  <rect class="dev" x="948" y="924" width="92" height="44" rx="9"/><text class="t" x="968" y="952">CI/CD</text>
+  <rect class="dev" x="1064" y="924" width="92" height="44" rx="9"/><text class="t" x="1081" y="952">镜像仓库</text>
+  <rect class="dev" x="1180" y="924" width="92" height="44" rx="9"/><text class="t" x="1200" y="952">K8s</text>
+
+  <path class="a" d="M376 242 H596"/><path class="a" d="M376 352 H596"/><path class="a" d="M376 462 H596"/>
+  <path class="a" d="M860 462 H1012"/>
+  <path class="a" d="M1078 494 C948 548 748 586 538 618"/>
+  <path class="a" d="M1230 494 C1068 548 904 590 718 618"/>
+  <path class="a" d="M792 652 C878 652 964 648 1048 648"/>
+  <path class="a" d="M792 686 C920 700 1040 722 1190 736"/>
+  <path class="d" d="M538 686 C656 830 940 830 1104 780"/>
+  <path class="d" d="M1104 718 C1010 680 902 676 792 686"/>
+  <path class="a" d="M178 796 C220 866 244 904 276 924"/>
+  <path class="a" d="M538 796 C532 860 520 902 516 924"/>
+  <path class="a" d="M1226 844 V924"/>
+  <text class="s" x="462" y="230">HTTPS</text><text class="s" x="888" y="450">鉴权 / 路由 / 限流</text><text class="s" x="852" y="634">RPC / REST</text><text class="s" x="790" y="828">领域事件 / 异步解耦</text><text class="s" x="1078" y="890">发布部署</text>
+</svg>
