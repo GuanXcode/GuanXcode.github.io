@@ -1,0 +1,262 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import type { SessionUser } from '../lib/auth';
+import WorkCard from './WorkCard.astro';
+import PostCard from './PostCard.astro';
+import SectionIcon from './SectionIcon.astro';
+
+interface Props {
+  user?: SessionUser;
+  publicWorks: CollectionEntry<'works'>[];
+  recentPosts: CollectionEntry<'blog'>[];
+  typeLabels: Record<string, string>;
+  privateWorkCount: number;
+}
+
+const { user, publicWorks, recentPosts, typeLabels, privateWorkCount } = Astro.props;
+
+const profiles = await getCollection('profile');
+const profile = profiles[0]?.data;
+
+const tagline = profile?.tagline ?? '以工程化方法构建可生产的 AI 系统，专注场景化落地与高可靠架构实践';
+const publicBio = profile?.publicBio?.trim() ?? '';
+const bioParts = publicBio.split('\n').map((line) => line.trim()).filter(Boolean);
+const bioFocus = bioParts[0] ?? '';
+const bioHint = bioParts.slice(1).join(' ');
+const bioFocusMatch = bioFocus.match(/^(.+?)[:：]\s*(.+)$/);
+const bioFocusLabel = bioFocusMatch?.[1] ?? '';
+const bioFocusBody = bioFocusMatch?.[2] ?? bioFocus;
+const bioFocusKeywords = ['领域建模', '工程交付', '系统长期演进'] as const;
+const bioFocusKeywordPattern = new RegExp(`(${bioFocusKeywords.join('|')})`, 'g');
+
+function splitBioFocusTokens(text: string) {
+  return text.split(bioFocusKeywordPattern).filter(Boolean);
+}
+
+function isBioFocusKeyword(token: string) {
+  return bioFocusKeywords.includes(token as (typeof bioFocusKeywords)[number]);
+}
+const manifesto = profile?.manifesto ?? '复杂在业务域生长，不在工具堆叠；架构师用设计原本承担担当、隔离技术、锚定演进';
+const heroNote = profile?.heroNote ?? '履历含经历与项目，点击后将引导授权';
+const focusAreas = profile?.focusAreas ?? [];
+
+const taglineKeywords = ['可生产的 AI 系统', '工程化方法', '场景化落地', '高可靠架构'] as const;
+const taglineKeywordPattern = new RegExp(`(${taglineKeywords.join('|')})`, 'g');
+const taglineSegments = tagline.split(/，|,/).map((segment) => segment.trim()).filter(Boolean);
+
+function splitTaglineTokens(segment: string) {
+  return segment.split(taglineKeywordPattern).filter(Boolean);
+}
+
+function isTaglineKeyword(token: string) {
+  return taglineKeywords.includes(token as (typeof taglineKeywords)[number]);
+}
+---
+
+<div class="home-dashboard">
+  <div class="home-dashboard-top">
+    <div class="home-dashboard-info">
+      <div class="home-tagline-block">
+        <span class="home-tagline-label" aria-hidden="true">PRODUCTION · CORE</span>
+        <h1 class="home-tagline">
+          {taglineSegments.map((segment, index) => (
+            <span class:list={['home-tagline-line', index > 0 && 'home-tagline-line--sub']}>
+              {splitTaglineTokens(segment).map((token) =>
+                isTaglineKeyword(token) ? (
+                  <span class="home-tagline-kw">{token}</span>
+                ) : (
+                  token
+                ),
+              )}
+              {index < taglineSegments.length - 1 ? '，' : ''}
+            </span>
+          ))}
+        </h1>
+      </div>
+
+      {(bioFocus || bioHint) && (
+        <div class="home-bio">
+          {bioFocus && (
+            <p class="home-bio-focus">
+              <span class="home-bio-focus-text">
+                {bioFocusLabel && (
+                  <>
+                    <span class="home-bio-focus-prefix">{bioFocusLabel}</span>
+                    <span class="home-bio-focus-sep" aria-hidden="true">·</span>
+                  </>
+                )}
+                {splitBioFocusTokens(bioFocusBody).map((token) =>
+                  isBioFocusKeyword(token) ? (
+                    <span class="home-bio-focus-kw">{token}</span>
+                  ) : (
+                    token
+                  ),
+                )}
+              </span>
+            </p>
+          )}
+          {bioHint && <p class="home-bio-hint">{bioHint}</p>}
+        </div>
+      )}
+
+      {focusAreas.length > 0 && (
+        <div class="flex flex-wrap gap-1.5">
+          {focusAreas.map((area) => (
+            <span class="text-xs px-2 py-0.5 rounded-full border border-[var(--color-border)] bg-white/80 text-[var(--color-text-muted)]">
+              {area}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <p class="home-manifesto-line">{manifesto}</p>
+    </div>
+
+    <aside class="home-portal-actions home-dashboard-actions">
+      {user ? (
+        <>
+          <div class="flex items-center gap-3 mb-4 pb-4 border-b border-[var(--color-border)]">
+            {user.avatar && (
+              <img src={user.avatar} alt="" class="w-9 h-9 rounded-full border border-[var(--color-border)]" />
+            )}
+            <div>
+              <p class="text-xs text-[var(--color-text-muted)]">已授权</p>
+              <p class="text-sm font-semibold">{user.name}</p>
+            </div>
+          </div>
+          <a href="/me/" class="home-portal-btn home-portal-btn--cta">
+            <span class="home-portal-btn-cta-icon" aria-hidden="true">
+              <SectionIcon name="timeline" class="w-[1.0625rem] h-[1.0625rem]" />
+            </span>
+            <span class="home-portal-btn-cta-label">进入履历总览</span>
+            <svg class="home-portal-btn-cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </>
+      ) : (
+        <>
+          <a href="/me/" class="home-portal-btn home-portal-btn--cta">
+            <span class="home-portal-btn-cta-icon" aria-hidden="true">
+              <SectionIcon name="timeline" class="w-[1.0625rem] h-[1.0625rem]" />
+            </span>
+            <span class="home-portal-btn-cta-label">查看履历</span>
+            <svg class="home-portal-btn-cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+          <p class="home-portal-hint">{heroNote}</p>
+        </>
+      )}
+
+      <div class="home-portal-btn-row">
+        <a href="/works/" class="home-portal-quick">
+          <span class="home-portal-quick-icon" aria-hidden="true">
+            <SectionIcon name="works" class="w-4 h-4" />
+          </span>
+          <span class="home-portal-quick-label">我的作品</span>
+        </a>
+        <a href="/blog/" class="home-portal-quick">
+          <span class="home-portal-quick-icon home-portal-quick-icon--blog" aria-hidden="true">
+            <SectionIcon name="log" class="w-4 h-4" />
+          </span>
+          <span class="home-portal-quick-label">我的博客</span>
+        </a>
+      </div>
+
+      <a
+        href="https://github.com/GuanXcode"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="home-github-btn"
+      >
+        <span class="home-github-btn-icon" aria-hidden="true">
+          <svg class="w-[1.125rem] h-[1.125rem]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+        </span>
+        <span class="home-github-btn-body">
+          <span class="home-github-btn-label">GitHub</span>
+          <span class="home-github-btn-sub">@GuanXcode</span>
+        </span>
+        <span class="home-github-btn-arrow" aria-hidden="true">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H9M17 7v8" />
+          </svg>
+        </span>
+      </a>
+    </aside>
+  </div>
+
+  <div class="home-dashboard-feed">
+    <section class="home-feed-col">
+      <div class="home-feed-head">
+        <div class="home-feed-head-main">
+          <span class="home-feed-icon" aria-hidden="true">
+            <SectionIcon name="works" class="w-[1.125rem] h-[1.125rem]" />
+          </span>
+          <div>
+            <h2 class="home-feed-title">我的作品</h2>
+            <p class="home-feed-sub">公开展示</p>
+          </div>
+        </div>
+        <a href="/works/" class="home-feed-more-btn" aria-label="查看全部作品">
+          <SectionIcon name="arrow-more" class="w-4 h-4" />
+        </a>
+      </div>
+      {privateWorkCount > 0 && (
+        <p class="text-xs text-[var(--color-text-muted)] mb-2">
+          另有 {privateWorkCount} 项需 <a href="/me/" class="text-[var(--color-brand)] hover:underline">授权查看</a>
+        </p>
+      )}
+      <div class="home-feed-list">
+        {publicWorks.length > 0 ? publicWorks.map((work) => (
+          <WorkCard
+            compact
+            title={work.data.title}
+            description={work.data.description}
+            type={typeLabels[work.data.type] ?? work.data.type}
+            typeKey={work.data.type}
+            slug={work.id}
+            url={work.data.url}
+            publicBadge={work.data.visibility === 'public'}
+          />
+        )) : (
+          <p class="text-sm text-[var(--color-text-muted)]">暂无公开展示的作品</p>
+        )}
+      </div>
+    </section>
+
+    <section class="home-feed-col">
+      <div class="home-feed-head">
+        <div class="home-feed-head-main">
+          <span class="home-feed-icon" aria-hidden="true">
+            <SectionIcon name="log" class="w-[1.125rem] h-[1.125rem]" />
+          </span>
+          <div>
+            <h2 class="home-feed-title">我的博客</h2>
+            <p class="home-feed-sub">时间线日志</p>
+          </div>
+        </div>
+        <a href="/blog/" class="home-feed-more-btn" aria-label="查看全部博客">
+          <SectionIcon name="arrow-more" class="w-4 h-4" />
+        </a>
+      </div>
+      <div class="home-feed-list">
+        {recentPosts.length > 0 ? recentPosts.map((post) => (
+          <PostCard
+            compact
+            title={post.data.title}
+            excerpt={post.data.subtitle || post.body?.replace(/<[^>]*>/g, '').replace(/[#*>`\[\]()!]/g, '').trim().slice(0, 100)}
+            date={post.data.date}
+            tags={post.data.tags}
+            slug={post.id}
+          />
+        )) : (
+          <p class="text-sm text-[var(--color-text-muted)]">暂无文章</p>
+        )}
+      </div>
+    </section>
+  </div>
+</div>

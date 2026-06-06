@@ -1,0 +1,57 @@
+---
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+import SectionTitle from '../../components/SectionTitle.astro';
+import WorkTypeBadge from '../../components/WorkTypeBadge.astro';
+import { getEntry, render } from 'astro:content';
+import { canViewWork } from '../../lib/content';
+
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect('/works');
+
+const work = await getEntry('works', slug);
+if (!work) return Astro.redirect('/works');
+
+const user = Astro.locals.user;
+if (!canViewWork(work, Boolean(user))) {
+  return Astro.redirect(`/login?next=${encodeURIComponent(`/works/${slug}/`)}`);
+}
+
+const { Content } = await render(work);
+
+const typeLabels: Record<string, string> = {
+  demo: 'Demo',
+  design: '设计',
+  talk: '演讲',
+  article: '文章',
+  repo: '仓库',
+  other: '其他',
+};
+---
+
+<Base title={`${work.data.title} - 作品`}>
+  <article class="py-16">
+    <div class="max-w-4xl mx-auto px-6">
+      <a href="/works/" class="inline-flex text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] mb-6">&larr; 返回作品</a>
+      <header class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm mb-8">
+        <SectionTitle title={work.data.title} subtitle="作品" icon="works" />
+        <div class="mt-4 pl-9">
+          <WorkTypeBadge type={typeLabels[work.data.type] ?? work.data.type} public={work.data.visibility === 'public'} />
+        </div>
+        <p class="text-[var(--color-text-secondary)] mt-4 pl-9">{work.data.description}</p>
+        {work.data.url && (
+          <a href={work.data.url} target="_blank" rel="noopener noreferrer" class="inline-block mt-4 ml-9 text-sm text-[var(--color-brand)] hover:underline">
+            查看外链 &rarr;
+          </a>
+        )}
+      </header>
+      {work.data.image && (
+        <img src={work.data.image} alt="" class="w-full rounded-xl mb-8 border border-[var(--color-border)]" />
+      )}
+      <div class="prose rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/85 p-6 md:p-8">
+        <Content />
+      </div>
+    </div>
+  </article>
+</Base>

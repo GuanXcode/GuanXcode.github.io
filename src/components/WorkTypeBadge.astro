@@ -1,0 +1,15 @@
+---
+interface Props {
+  type: string;
+  public?: boolean;
+}
+
+const { type, public: isPublic } = Astro.props;
+---
+
+<div class="flex flex-wrap gap-2">
+  <span class="work-type-badge">{type}</span>
+  {isPublic && (
+    <span class="work-type-badge work-type-badge--public">公开</span>
+  )}
+</div>

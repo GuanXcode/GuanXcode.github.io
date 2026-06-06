@@ -1,0 +1,71 @@
+---
+import WorkTypeIcon from './WorkTypeIcon.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  type: string;
+  typeKey?: 'demo' | 'design' | 'talk' | 'article' | 'repo' | 'other';
+  slug?: string;
+  url?: string;
+  publicBadge?: boolean;
+  compact?: boolean;
+}
+
+const { title, description, type, typeKey = 'other', slug, url, publicBadge, compact = false } = Astro.props;
+const href = slug ? `/works/${slug}/` : url;
+const isExternal = Boolean(url && !slug);
+const iconType = typeKey === 'other' && url?.includes('github.com') ? 'repo' : typeKey;
+---
+
+{compact && href ? (
+  <a
+    href={href}
+    target={isExternal ? '_blank' : undefined}
+    rel={isExternal ? 'noopener noreferrer' : undefined}
+    class="feed-mini-card group"
+  >
+    <span class:list={['feed-mini-icon', `feed-mini-icon--${iconType}`]} aria-hidden="true">
+      <WorkTypeIcon type={iconType} class="w-4 h-4" />
+    </span>
+    <span class="feed-mini-body">
+      <span class="feed-mini-top">
+        <span class="feed-mini-title">{title}</span>
+        <span class="feed-mini-badge">{type}</span>
+      </span>
+      <span class="feed-mini-desc">{description}</span>
+    </span>
+    {isExternal ? (
+      <svg class="feed-mini-arrow w-3.5 h-3.5 shrink-0 opacity-40 group-hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H9M17 7v8" />
+      </svg>
+    ) : (
+      <svg class="feed-mini-arrow w-3.5 h-3.5 shrink-0 opacity-30 group-hover:opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    )}
+  </a>
+) : (
+  <article class:list={[
+    'group rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] hover:shadow-md transition-all h-full flex flex-col',
+    compact ? 'p-3' : 'p-5',
+  ]}>
+    <div class="flex items-start justify-between gap-2 mb-2">
+      <span class="inline-flex items-center gap-1.5 text-xs px-2 py-0.5 rounded bg-[var(--color-bg-alt)] text-[var(--color-text-muted)]">
+        <WorkTypeIcon type={iconType} class="w-3 h-3" />
+        {type}
+      </span>
+      {publicBadge && (
+        <span class="text-xs px-2 py-0.5 rounded border border-[var(--color-brand)]/30 text-[var(--color-brand)]">公开</span>
+      )}
+    </div>
+    <h3 class:list={['font-semibold mb-1 group-hover:text-[var(--color-brand)] transition-colors', compact ? 'text-sm' : 'text-base mb-2']}>
+      {href ? (
+        <a href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener noreferrer' : undefined} class="hover:underline">
+          {title}
+        </a>
+      ) : title}
+    </h3>
+    <p class:list={['text-[var(--color-text-secondary)] flex-1', compact ? 'text-xs line-clamp-2' : 'text-sm']}>{description}</p>
+  </article>
+)}

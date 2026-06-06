@@ -1,0 +1,45 @@
+---
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+import SectionTitle from '../../components/SectionTitle.astro';
+import { getEntry } from 'astro:content';
+
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect('/projects');
+
+const project = await getEntry('projects', slug);
+if (!project) return Astro.redirect('/projects');
+
+const brief = project.data.designBrief?.trim();
+---
+
+<Base title={`${project.data.title} - 项目`}>
+  <article class="py-16">
+    <div class="max-w-4xl mx-auto px-6">
+      <a href="/projects/" class="inline-flex text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] mb-6">&larr; 返回项目</a>
+      <header class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm mb-8">
+        <SectionTitle title={project.data.title} subtitle="项目概要" icon="projects" />
+        <p class="text-[var(--color-text-secondary)] mt-4 pl-9">{project.data.description}</p>
+        <div class="flex flex-wrap gap-3 text-sm text-[var(--color-text-muted)] mt-3 pl-9">
+          {project.data.role && <span>角色：{project.data.role}</span>}
+          {project.data.period && <span>周期：{project.data.period}</span>}
+        </div>
+        <div class="flex flex-wrap gap-1.5 mt-4 pl-9">
+          {project.data.tech.map((t) => (
+            <span class="text-xs px-2 py-0.5 rounded bg-[var(--color-bg-alt)] text-[var(--color-text-muted)]">{t}</span>
+          ))}
+        </div>
+      </header>
+      {project.data.image && (
+        <img src={project.data.image} alt="" class="w-full rounded-xl mb-8 border border-[var(--color-border)]" />
+      )}
+      {brief && (
+        <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/85 p-6 md:p-8">
+          <h3 class="text-sm font-semibold text-[var(--color-text)] mb-4">设计方案简述</h3>
+          <div class="prose text-sm whitespace-pre-line">{brief}</div>
+        </div>
+      )}
+    </div>
+  </article>
+</Base>

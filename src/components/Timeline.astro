@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ImpactList from './ImpactList.astro';
+
+interface Props {
+  entries: Array<{
+    exp: CollectionEntry<'experience'>;
+    Content: any;
+  }>;
+}
+
+const { entries } = Astro.props;
+---
+
+<div class="timeline">
+  {entries.map(({ exp, Content }, index) => (
+    <article class="timeline-item">
+      <div class="timeline-axis" aria-hidden="true">
+        <span class="timeline-dot"></span>
+        {index < entries.length - 1 && <span class="timeline-line"></span>}
+      </div>
+      <div class="timeline-body rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm">
+        <header class="mb-4">
+          <p class="text-xs tracking-[0.14em] uppercase text-[var(--color-brand-light)] mb-2">
+            {exp.data.start}{exp.data.end ? ` — ${exp.data.end}` : ''}
+          </p>
+          <h2 class="text-xl font-bold">{exp.data.company}</h2>
+          <p class="text-[var(--color-brand)] font-medium mt-1">{exp.data.role}</p>
+          {exp.data.location && (
+            <p class="text-sm text-[var(--color-text-muted)] mt-1">{exp.data.location}</p>
+          )}
+        </header>
+        <ImpactList items={exp.data.highlights} />
+        {exp.data.stack.length > 0 && (
+          <div class="flex flex-wrap gap-1.5 mt-4">
+            {exp.data.stack.map((t) => (
+              <span class="text-xs px-2 py-0.5 rounded bg-[var(--color-bg-alt)] text-[var(--color-text-muted)]">{t}</span>
+            ))}
+          </div>
+        )}
+        <div class="prose text-sm mt-4">
+          <Content />
+        </div>
+      </div>
+    </article>
+  ))}
+</div>
