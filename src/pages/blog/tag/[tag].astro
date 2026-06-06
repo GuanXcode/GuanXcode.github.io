@@ -5,7 +5,7 @@ import SectionTitle from '../../../components/SectionTitle.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = (await getCollection('blog')).filter((post) => !post.data.draft);
   const allTags = [...new Set(posts.flatMap((p) => p.data.tags))];
   return allTags.map((tag) => ({
     params: { tag },

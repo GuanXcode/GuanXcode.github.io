@@ -1,43 +1,27 @@
-# Astro Starter Kit: Minimal
+# GuanXcode.github.io
 
-```sh
-npm create astro@latest -- --template minimal
-```
+这是一个基于 Astro 的个人站点，包含首页、博客、标签页和项目展示。
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## 目录结构
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+├── components/  # 可复用 UI 组件
+├── content/     # 博客与项目 Markdown 内容
+├── layouts/     # 全站布局
+├── pages/       # 路由页面
+└── styles/      # 全局样式与主题变量
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 脚本
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```sh
+npm run dev
+npm run build
+npm run check
+npm run preview
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+## 部署
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+仓库通过 GitHub Actions 构建并发布到 GitHub Pages，工作流位于 `.github/workflows/deploy.yml`。
