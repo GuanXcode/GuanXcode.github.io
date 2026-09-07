@@ -1,0 +1,32 @@
+version: 2
+
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "03:00"
+      timezone: "Asia/Shanghai"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(dev-deps)"
+    # Astro 与 Vercel adapter 强耦合（adapter 的 peer 要求对应 astro 大版本），
+    # 必须同升同降，因此打包成一个组一起提 PR。
+    groups:
+      astro-ecosystem:
+        patterns:
+          - "astro"
+          - "@astrojs/*"
+    # 大版本升级（Astro 6 -> 7 等）涉及框架破坏性变更，禁止 Dependabot 自动提，
+    # 需要人工评估后单独做迁移。
+    ignore:
+      - dependency-name: "astro"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@astrojs/vercel"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@astrojs/sitemap"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@astrojs/rss"
+        update-types: ["version-update:semver-major"]
