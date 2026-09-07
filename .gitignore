@@ -27,3 +27,6 @@ pnpm-debug.log*
 
 # Vercel
 .vercel
+
+# WorkBuddy (AI 助手的项目数据/记忆)
+.workbuddy/
