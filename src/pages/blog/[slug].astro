@@ -4,10 +4,10 @@ import SectionTitle from '../../components/SectionTitle.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 
 const { slug } = Astro.params;
-if (!slug) return Astro.redirect('/blog');
+if (!slug) return Astro.redirect('/research/');
 
 const post = await getEntry('blog', slug);
-if (!post || post.data.draft) return Astro.redirect('/blog');
+if (!post || post.data.draft) return Astro.redirect('/research/');
 
 const { Content } = await render(post);
 
@@ -24,7 +24,7 @@ const dateStr = post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', mo
 <Base title={`${post.data.title} - AI Kosei`} description={post.data.subtitle}>
   <article class="py-16">
     <div class="max-w-4xl mx-auto px-6">
-      <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] transition-colors mb-4">&larr; 返回时间线日志</a>
+      <a href="/research/" class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] transition-colors mb-4">&larr; 返回调研</a>
       <header class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm mb-8">
         <div class="mb-3">
           <SectionTitle title={post.data.title} icon="article" />

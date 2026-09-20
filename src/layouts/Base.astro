@@ -4,52 +4,63 @@ interface Props {
   description?: string;
   fullWidth?: boolean;
   compactFooter?: boolean;
+  variant?: 'public' | 'console' | 'gate';
+  wide?: boolean;
 }
 
-const { title, description = 'AI Kosei - 以工程化方法构建可生产的 AI 系统', fullWidth = false, compactFooter = false } = Astro.props;
+const {
+  title,
+  description = 'AI Kosei - 以工程化方法构建可生产的 AI 系统',
+  fullWidth = false,
+  compactFooter = false,
+  variant = 'public',
+  wide = false,
+} = Astro.props;
 const user = Astro.locals.user;
 const shellClass = fullWidth
   ? (compactFooter ? 'w-full px-3 sm:px-4' : 'w-full px-4 sm:px-6 lg:px-8')
-  : 'max-w-5xl mx-auto px-6';
+  : `${wide ? 'max-w-6xl' : 'max-w-5xl'} mx-auto px-6`;
+const isConsole = variant === 'console';
+const isGate = variant === 'gate';
+const path = Astro.url.pathname;
+const navHome = path === '/';
+const navResume = path.startsWith('/me') || path.startsWith('/experience');
+const navResearch = path.startsWith('/research') || path.startsWith('/blog');
+const navProjects = path.startsWith('/projects') || path.startsWith('/works');
+const navLink = (active: boolean) =>
+  active
+    ? 'text-sm text-[var(--color-text)]'
+    : 'text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text)] transition-colors';
 
 import '../styles/global.css';
-import SiteHeader from '../components/SiteHeader.astro';
-import SiteFooter from '../components/SiteFooter.astro';
-import SupportWidget from '../components/SupportWidget.astro';
-
-const { title: finalTitle, description: finalDescription = 'AI克塞号 / AI Kosei - 以时间感知驱动智能工程' } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-shell={variant}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={finalDescription} />
+    <meta name="description" content={description} />
     <meta name="keywords" content="AI Kosei, GuanXcode, AI工程, 架构, 技术博客" />
-    <meta name="theme-color" content="#F3F8FF" />
+    <meta name="theme-color" content="#070b12" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
-    <title>{finalTitle}</title>
+    <title>{title}</title>
   </head>
   <body class="min-h-screen flex flex-col">
-    <header class="sticky top-0 z-50 bg-[var(--color-bg)]/70 backdrop-blur-md border-b border-[var(--color-border)]">
+    <header class="sticky top-0 z-50 bg-[var(--color-bg)]/80 backdrop-blur-md border-b border-[var(--color-border)]">
       <nav class={`${shellClass} h-16 flex items-center justify-between`}>
         <a href="/" class="flex items-center gap-3 text-[var(--color-text)] hover:text-[var(--color-brand-light)] transition-colors">
           <img src="/img/logo-kosei.svg" alt="AI Kosei" class="w-8 h-8 rounded-lg" />
           <span class="brand-display font-bold text-base md:text-lg">AI Kosei</span>
+          {isConsole && <span class="nav-auth-pill hidden sm:inline">Authed</span>}
+          {isGate && <span class="nav-auth-pill hidden sm:inline">Gate</span>}
         </a>
         <div class="flex items-center gap-5 md:gap-6">
-          <a href="/" class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text)] transition-colors">首页</a>
-          <a href="/works/" class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text)] transition-colors">作品</a>
-          <a href="/me/" class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text)] transition-colors">履历</a>
-          {user && (
-            <>
-              <a href="/experience/" class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text)] transition-colors hidden sm:inline">经历</a>
-              <a href="/projects/" class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text)] transition-colors hidden sm:inline">项目</a>
-            </>
-          )}
-          <a href="/blog/" class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text)] transition-colors">博客</a>
+          <a href="/" class={navLink(navHome)} aria-current={navHome ? 'page' : undefined}>首页</a>
+          <a href="/me/" class={navLink(navResume)} aria-current={navResume ? 'page' : undefined}>履历</a>
+          <a href="/research/" class={navLink(navResearch)} aria-current={navResearch ? 'page' : undefined}>调研</a>
+          <a href="/projects/" class={navLink(navProjects)} aria-current={navProjects ? 'page' : undefined}>项目</a>
           {user && (
             <a href="/auth/logout" class="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors">退出</a>
           )}

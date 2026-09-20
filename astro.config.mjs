@@ -15,7 +15,9 @@ export default defineConfig({
   redirects: {
     '/about.html': '/#about',
     '/portfolio.html': '/me#projects',
-    '/tags.html': '/blog/',
+    '/tags.html': '/research/',
+    '/blog': '/research/',
+    '/works': '/projects/',
     '/resume.html': '/me#skills',
   },
 });

@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import SectionTitle from '../../components/SectionTitle.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags))].sort();
+---
+
+<Base title="调研 - AI Kosei" description="工程调研笔记与复盘">
+  <section class="py-16">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm mb-8">
+        <SectionTitle title="调研" subtitle="博客 · 时间线日志" icon="log" />
+        <p class="text-sm text-[var(--color-text-secondary)] mt-2 pl-9">记录 AI 工程任务的关键节点、方法与复盘。</p>
+      </div>
+
+      {allTags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-8">
+          <a href="/research/" class="chip hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-colors">全部</a>
+          {allTags.map((tag) => (
+            <a href={`/blog/tag/${tag}/`} class="chip hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] transition-colors">{tag}</a>
+          ))}
+        </div>
+      )}
+
+      <div class="space-y-4">
+        {allPosts.length > 0 ? allPosts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            excerpt={post.data.subtitle || post.body?.replace(/<[^>]*>/g, '').replace(/[#*>`\[\]()!]/g, '').trim().slice(0, 150)}
+            date={post.data.date}
+            tags={post.data.tags}
+            slug={post.id}
+          />
+        )) : <p class="text-[var(--color-text-muted)]">暂无调研笔记</p>}
+      </div>
+    </div>
+  </section>
+</Base>

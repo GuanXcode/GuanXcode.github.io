@@ -18,18 +18,20 @@ const experienceEntries = await Promise.all(
 );
 ---
 
-<Base title="经历 - AI Kosei">
+<Base title="经历 - AI Kosei" variant="console">
   <section class="py-16">
     <div class="max-w-4xl mx-auto px-6">
       <a href="/me/" class="inline-flex text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] mb-6">&larr; 返回履历总览</a>
       <SectionTitle title="经历" subtitle="职业时间线" icon="timeline" />
-      <p class="text-sm text-[var(--color-text-secondary)] mt-2 mb-10 pl-9">完整任职记录（授权访客可见）。</p>
+      <div class="hud-panel mt-8">
+      <p class="text-sm text-[var(--color-text-secondary)] mb-8">完整任职记录（授权访客可见）。</p>
 
       {experienceEntries.length > 0 ? (
         <Timeline entries={experienceEntries} />
       ) : (
         <p class="text-[var(--color-text-muted)] text-sm">暂无经历条目，内容筹备中。</p>
       )}
+      </div>
     </div>
   </section>
 </Base>

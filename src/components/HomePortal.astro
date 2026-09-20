@@ -11,8 +11,8 @@ const { user } = Astro.props;
 const profiles = await getCollection('profile');
 const profile = profiles[0]?.data;
 
-const tagline = profile?.tagline ?? '以工程化方法构建可生产的 AI 系统，专注场景化落地与高可靠架构实践';
-const publicBio = profile?.publicBio?.trim() ?? '';
+const tagline = profile?.tagline ?? '以 Agent、RAG 与评测闭环，构建可生产的 AI 系统';
+const publicBio = profile?.publicBio?.trim() ?? '从场景切入：编排智能体、治理知识、用评测与护栏承接不确定性';
 const manifesto = profile?.manifesto ?? '复杂在业务域生长，不在工具堆叠；架构师用设计原本承担担当、隔离技术、锚定演进';
 const heroNote = profile?.heroNote ?? '履历含经历与项目概要，点击后将引导 GitHub 授权。';
 const focusAreas = profile?.focusAreas ?? [];
@@ -40,7 +40,7 @@ const focusAreas = profile?.focusAreas ?? [];
         {focusAreas.length > 0 && (
           <div class="flex flex-wrap gap-2 mb-6">
             {focusAreas.map((area) => (
-              <span class="text-xs px-2.5 py-1 rounded-full border border-[var(--color-border)] bg-white/80 text-[var(--color-text-muted)]">
+              <span class="chip">
                 {area}
               </span>
             ))}
