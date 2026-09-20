@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import type { AstroCookies } from 'astro';
+import { stripLocalePrefix } from './i18n';
 
 export const SESSION_COOKIE = 'gx_session';
 const SESSION_MAX_AGE_SEC = 60 * 60 * 24 * 7; // 7 days
@@ -166,7 +167,7 @@ function normalizePath(pathname: string): string {
 }
 
 export function isProtectedPath(pathname: string): boolean {
-  const path = normalizePath(pathname);
+  const path = normalizePath(stripLocalePrefix(pathname));
   if (PROTECTED_PREFIXES.some((prefix) => path === prefix || path.startsWith(`${prefix}/`))) {
     return true;
   }

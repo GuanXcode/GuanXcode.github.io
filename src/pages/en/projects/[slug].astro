@@ -1,12 +1,12 @@
 ---
 export const prerender = false;
 
-import Base from '../../layouts/Base.astro';
-import SectionTitle from '../../components/SectionTitle.astro';
+import Base from '../../../layouts/Base.astro';
+import SectionTitle from '../../../components/SectionTitle.astro';
 import { getEntry } from 'astro:content';
-import { getLocaleFromPath, withLocale } from '../../lib/i18n';
+import { withLocale } from '../../../lib/i18n';
 
-const locale = Astro.locals.locale ?? getLocaleFromPath(Astro.url.pathname);
+const locale = 'en' as const;
 const { slug } = Astro.params;
 if (!slug) return Astro.redirect(withLocale(locale, '/projects/'));
 
@@ -16,20 +16,21 @@ if (!project) return Astro.redirect(withLocale(locale, '/projects/'));
 const brief = project.data.designBrief?.trim();
 ---
 
-<Base title={`${project.data.title} - 项目`} variant="console" locale={locale}>
+<Base title={`${project.data.title} - Projects`} variant="console" locale={locale}>
   <article class="py-16">
     <div class="max-w-4xl mx-auto px-6">
-      <a href={withLocale(locale, '/projects/')} class="inline-flex text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] mb-6">&larr; 返回项目</a>
+      <a href={withLocale(locale, '/projects/')} class="inline-flex text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] mb-6">&larr; Back to projects</a>
+      <p class="content-lang-note mb-6">Detail content is currently in Chinese.</p>
       <header class="hud-panel mb-8">
-        <SectionTitle title={project.data.title} subtitle="项目概要" icon="projects" />
+        <SectionTitle title={project.data.title} subtitle="Project brief" icon="projects" />
         <p class="text-[var(--color-text-secondary)] mt-4 pl-9">{project.data.description}</p>
         <div class="flex flex-wrap gap-3 text-sm text-[var(--color-text-muted)] mt-3 pl-9">
-          {project.data.role && <span>角色：{project.data.role}</span>}
-          {project.data.period && <span>周期：{project.data.period}</span>}
+          {project.data.role && <span>Role: {project.data.role}</span>}
+          {project.data.period && <span>Period: {project.data.period}</span>}
         </div>
         <div class="flex flex-wrap gap-1.5 mt-4 pl-9">
-          {project.data.tech.map((t) => (
-            <span class="text-xs px-2 py-0.5 rounded bg-[var(--color-bg-alt)] text-[var(--color-text-muted)]">{t}</span>
+          {project.data.tech.map((tech) => (
+            <span class="text-xs px-2 py-0.5 rounded bg-[var(--color-bg-alt)] text-[var(--color-text-muted)]">{tech}</span>
           ))}
         </div>
       </header>
@@ -38,7 +39,7 @@ const brief = project.data.designBrief?.trim();
       )}
       {brief && (
         <div class="hud-panel">
-          <h3 class="text-sm font-semibold text-[var(--color-text)] mb-4">设计方案简述</h3>
+          <h3 class="text-sm font-semibold text-[var(--color-text)] mb-4">Design brief</h3>
           <div class="prose text-sm whitespace-pre-line">{brief}</div>
         </div>
       )}

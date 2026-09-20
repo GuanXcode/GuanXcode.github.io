@@ -8,7 +8,16 @@ export default defineConfig({
   site: 'https://guanxcode.vip',
   output: 'server',
   adapter: vercel(),
+  // Keep content data-store alongside .astro/ so `astro sync` and `astro dev` share one cache
+  cacheDir: './.astro',
   integrations: [sitemap()],
+  i18n: {
+    defaultLocale: 'zh',
+    locales: ['zh', 'en'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
   },

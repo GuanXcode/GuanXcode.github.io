@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -11,8 +11,9 @@
   --color-text-muted: #6b7a90;
   --color-border: #1e2a3d;
   --color-card: #0f1724;
-  --font-sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
-  --font-display: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  /* Shared stacks so zh↔en switch doesn't reflow Latin metrics */
+  --font-sans: "DM Sans", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-display: "Space Grotesk", "DM Sans", "Noto Sans SC", "PingFang SC", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", "Consolas", monospace;
 }
 
@@ -25,7 +26,8 @@ html {
 body {
   font-family: var(--font-sans);
   color: var(--color-text);
-  line-height: 1.75;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
   background:
     radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.09), transparent 34%),
@@ -1097,31 +1099,41 @@ h3,
   right: 1.25rem;
   bottom: 1.25rem;
   z-index: 60;
-  width: 3.35rem;
-  height: 3.35rem;
+  width: 3.1rem;
+  height: 3.1rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  background: linear-gradient(145deg, #0ea5e9, #0284c7);
-  color: #fff;
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  background: rgba(10, 16, 26, 0.88);
+  color: var(--color-brand-light);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 12px 28px rgba(2, 132, 199, 0.36);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
 }
 
 .support-fab-glow {
   position: absolute;
-  inset: -30%;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
-  animation: supportGlow 2.6s ease-in-out infinite;
+  inset: -40%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent 68%);
+  animation: supportGlow 3.2s ease-in-out infinite;
+}
+
+.support-fab-icon {
+  position: relative;
+  z-index: 1;
+  width: 1.35rem;
+  height: 1.35rem;
 }
 
 .support-fab:hover {
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 16px 34px rgba(2, 132, 199, 0.42);
+  transform: translateY(-2px);
+  color: var(--color-brand);
+  border-color: rgba(125, 211, 252, 0.5);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.4), 0 0 20px rgba(56, 189, 248, 0.12);
 }
 
 .support-modal {
@@ -1314,6 +1326,197 @@ html[data-shell="gate"] .hud-panel {
   border-radius: 0.25rem;
 }
 
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 0.4rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.lang-switch-btn {
+  padding: 0.2rem 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s;
+}
+
+.lang-switch-btn:hover {
+  color: var(--color-text);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.lang-switch-btn.is-active {
+  color: #070b12;
+  background: var(--color-brand);
+}
+
+/* —— Login gate stage —— */
+.gate-stage {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 8rem);
+  padding: 3rem 1.25rem 4rem;
+  overflow: hidden;
+}
+
+.gate-stage-glow {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 42% 36% at 50% 44%, rgba(56, 189, 248, 0.16), transparent 68%);
+}
+
+.gate-panel {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 26rem);
+  text-align: center;
+  padding: 2.5rem 1.75rem 2rem;
+  border: none;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.gate-panel-label {
+  display: inline-block;
+  margin-bottom: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-brand-light);
+}
+
+.gate-sys {
+  margin: 0 0 1.1rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  color: rgba(125, 211, 252, 0.75);
+}
+
+.gate-logo {
+  width: 4.25rem;
+  height: 4.25rem;
+  border-radius: 0.9rem;
+  margin: 0 auto 1.15rem;
+  border: none;
+  box-shadow: 0 0 36px rgba(56, 189, 248, 0.22);
+}
+
+.gate-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.gate-status {
+  margin: 0 0 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-brand-light);
+}
+
+.gate-whitelist {
+  display: inline-block;
+  margin: 0 0 1rem;
+  padding: 0.4rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-brand-light);
+  border: none;
+  background: rgba(14, 116, 144, 0.16);
+  border-radius: 999px;
+}
+
+.gate-blurb {
+  margin: 0 0 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+.gate-alert {
+  margin: 0 0 1.15rem;
+  padding: 0.75rem 0.9rem;
+  text-align: left;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: #fecaca;
+  background: rgba(127, 29, 29, 0.45);
+  border: 1px solid rgba(248, 113, 113, 0.45);
+  border-radius: 0.5rem;
+}
+
+.gate-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.85rem;
+  padding: 0.75rem 1.15rem;
+  border-radius: 0.65rem;
+  background: var(--color-brand);
+  color: #070b12;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35), 0 10px 28px rgba(56, 189, 248, 0.25);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+
+.gate-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.45), 0 14px 34px rgba(56, 189, 248, 0.34);
+}
+
+.gate-cta svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.gate-back {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.gate-back:hover {
+  color: var(--color-brand);
+}
+
+.content-lang-note {
+  margin: 0 0 1.25rem;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  border: 1px dashed rgba(56, 189, 248, 0.25);
+  border-radius: 0.45rem;
+  background: rgba(15, 23, 36, 0.55);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html[data-shell="console"] body::after,
   .radar-scan,
@@ -1329,8 +1532,14 @@ html[data-shell="gate"] .hud-panel {
   }
 
   .home-cta:hover,
-  .home-post-card:hover {
+  .home-post-card:hover,
+  .gate-cta:hover,
+  .support-fab:hover {
     transform: none;
+  }
+
+  .support-fab-glow {
+    animation: none;
   }
 
   .home-hero-stars {

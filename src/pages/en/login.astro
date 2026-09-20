@@ -1,11 +1,11 @@
 ---
-import Base from '../layouts/Base.astro';
-import LoginGate from '../components/LoginGate.astro';
-import { getLocaleFromPath, t, withLocale } from '../lib/i18n';
+import Base from '../../layouts/Base.astro';
+import LoginGate from '../../components/LoginGate.astro';
+import { t, withLocale } from '../../lib/i18n';
 
 export const prerender = false;
 
-const locale = Astro.locals.locale ?? getLocaleFromPath(Astro.url.pathname);
+const locale = 'en' as const;
 const error = Astro.url.searchParams.get('error');
 const next = Astro.url.searchParams.get('next') ?? withLocale(locale, '/me/');
 ---

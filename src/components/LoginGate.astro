@@ -1,0 +1,58 @@
+---
+import {
+  getLocaleFromPath,
+  t,
+  withLocale,
+  type Locale,
+  type MessageKey,
+} from '../lib/i18n';
+
+interface Props {
+  locale?: Locale;
+  error?: string | null;
+  next?: string;
+}
+
+const locale: Locale = Astro.props.locale ?? getLocaleFromPath(Astro.url.pathname);
+const error = Astro.props.error ?? null;
+const next = Astro.props.next ?? withLocale(locale, '/me/');
+
+const errorKeys: Record<string, MessageKey> = {
+  not_allowed: 'login.error.not_allowed',
+  oauth_denied: 'login.error.oauth_denied',
+  oauth_failed: 'login.error.oauth_failed',
+  invalid_state: 'login.error.invalid_state',
+  config: 'login.error.config',
+};
+
+const errorText = error
+  ? t(locale, errorKeys[error] ?? 'login.error.generic')
+  : null;
+const loginHref = `/auth/github?next=${encodeURIComponent(next)}`;
+const homeHref = withLocale(locale, '/');
+---
+
+<section class="gate-stage">
+  <div class="gate-stage-glow" aria-hidden="true"></div>
+  <div class="gate-panel">
+    <span class="gate-panel-label">{t(locale, 'login.label')}</span>
+    <p class="gate-sys">{t(locale, 'login.sysStatus')}</p>
+    <img src="/img/logo-kosei.svg" alt="" class="gate-logo" />
+    <h1 class="gate-title">{t(locale, 'login.heading')}</h1>
+    <p class="gate-whitelist" role="note">{t(locale, 'login.status')}</p>
+    <p class="gate-blurb">{t(locale, 'login.blurb')}</p>
+
+    {errorText && (
+      <p class="gate-alert" role="alert">{errorText}</p>
+    )}
+
+    <a href={loginHref} class="gate-cta">
+      <svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+      </svg>
+      {t(locale, 'login.cta')}
+    </a>
+
+    <a href={homeHref} class="gate-back">{t(locale, 'login.back')}</a>
+  </div>
+</section>
