@@ -1,65 +1,104 @@
 ---
-import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import type { SessionUser } from '../lib/auth';
 import WorkCard from './WorkCard.astro';
 import SectionIcon from './SectionIcon.astro';
+import { t, withLocale, type Locale } from '../lib/i18n';
 
 interface Props {
   user?: SessionUser;
   publicWorks: CollectionEntry<'works'>[];
   recentPosts: CollectionEntry<'blog'>[];
-  typeLabels: Record<string, string>;
   privateWorkCount: number;
+  locale?: Locale;
 }
 
-const { user, publicWorks, recentPosts, typeLabels, privateWorkCount } = Astro.props;
-
-const profiles = await getCollection('profile');
-const profile = profiles[0]?.data;
-
-const role = profile?.role ?? 'AI Agent 与知识系统构建者';
-const tagline = profile?.tagline ?? '以 Agent、RAG 与评测闭环，构建可生产的 AI 系统';
-const publicBio =
-  profile?.publicBio?.trim() ??
-  '从场景切入：编排智能体、治理知识、用评测与护栏承接不确定性';
+const {
+  user,
+  publicWorks,
+  recentPosts,
+  privateWorkCount,
+  locale = 'zh',
+} = Astro.props;
 
 const skills = [
   {
-    title: 'Agent 系统',
-    summary: '把模型能力收成可编排、可中断、可交付的任务闭环',
+    title: t(locale, 'skill.agent.title'),
+    summary: t(locale, 'skill.agent.summary'),
     icon: 'timeline' as const,
-    items: ['多 Agent 协作', '工具调用与 MCP', '任务状态机', '人机协同 / HITL'],
+    items: [
+      t(locale, 'skill.agent.i0'),
+      t(locale, 'skill.agent.i1'),
+      t(locale, 'skill.agent.i2'),
+      t(locale, 'skill.agent.i3'),
+    ],
   },
   {
-    title: '知识与 RAG',
-    summary: '让回答可溯源、可权限隔离，而不是黑盒问答',
+    title: t(locale, 'skill.rag.title'),
+    summary: t(locale, 'skill.rag.summary'),
     icon: 'log' as const,
-    items: ['多源检索链路', '权限与隔离', '召回评估', '知识持续更新'],
+    items: [
+      t(locale, 'skill.rag.i0'),
+      t(locale, 'skill.rag.i1'),
+      t(locale, 'skill.rag.i2'),
+      t(locale, 'skill.rag.i3'),
+    ],
   },
   {
-    title: '评测与护栏',
-    summary: '用度量与约束承接模型波动，保证上线可控',
+    title: t(locale, 'skill.eval.title'),
+    summary: t(locale, 'skill.eval.summary'),
     icon: 'skills' as const,
-    items: ['离线 / 在线评测', '幻觉与越权护栏', '成本与延迟治理', '可观测与回放'],
+    items: [
+      t(locale, 'skill.eval.i0'),
+      t(locale, 'skill.eval.i1'),
+      t(locale, 'skill.eval.i2'),
+      t(locale, 'skill.eval.i3'),
+    ],
   },
   {
-    title: 'AI 原生架构',
-    summary: '以业务域与演进边界设计平台，而不是堆模型与中间件',
+    title: t(locale, 'skill.arch.title'),
+    summary: t(locale, 'skill.arch.summary'),
     icon: 'projects' as const,
-    items: ['场景化落地', '领域建模', '平台化复用', '长期演进'],
+    items: [
+      t(locale, 'skill.arch.i0'),
+      t(locale, 'skill.arch.i1'),
+      t(locale, 'skill.arch.i2'),
+      t(locale, 'skill.arch.i3'),
+    ],
   },
 ];
 
 const heroTags = skills.map((s) => s.title);
+const meHref = withLocale(locale, '/me/');
+const researchHref = withLocale(locale, '/research/');
+const projectsHref = withLocale(locale, '/projects/');
+const projectsLoginHref = `${withLocale(locale, '/login')}?next=${encodeURIComponent(withLocale(locale, '/projects/'))}`;
+
+const typeKeyMap = {
+  demo: 'type.demo',
+  design: 'type.design',
+  talk: 'type.talk',
+  article: 'type.article',
+  repo: 'type.repo',
+  other: 'type.other',
+} as const;
+
+function typeLabel(type: string) {
+  const key = typeKeyMap[type as keyof typeof typeKeyMap];
+  return key ? t(locale, key) : type;
+}
 
 function formatPostDate(date: Date) {
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return date.toLocaleDateString(locale === 'en' ? 'en-US' : 'zh-CN', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
 }
 ---
 
 <div class="home-landing">
-  <section class="home-hero-stage" aria-label="首页主视觉">
+  <section class="home-hero-stage" aria-label={t(locale, 'home.heroAria')}>
     <canvas class="home-hero-canvas" id="home-starfield" aria-hidden="true"></canvas>
     <div class="home-hero-stars home-hero-stars--far" aria-hidden="true"></div>
     <div class="home-hero-stars home-hero-stars--near" aria-hidden="true"></div>
@@ -67,21 +106,21 @@ function formatPostDate(date: Date) {
     <div class="home-hero-glow" aria-hidden="true"></div>
 
     <div class="home-hero-inner">
-      <p class="home-hero-hello">你好，我是</p>
+      <p class="home-hero-hello">{t(locale, 'home.hello')}</p>
       <h1 class="home-hero-brand">AI Kosei</h1>
-      <p class="home-hero-role">{role}</p>
-      <p class="home-hero-lead">{tagline}</p>
-      {publicBio && <p class="home-hero-desc">{publicBio}</p>}
+      <p class="home-hero-role">{t(locale, 'home.role')}</p>
+      <p class="home-hero-lead">{t(locale, 'home.tagline')}</p>
+      <p class="home-hero-desc">{t(locale, 'home.bio')}</p>
 
       <div class="home-hero-ctas">
-        <a href="/me/" class="home-cta home-cta--primary">
-          {user ? '进入履历' : '查看履历'}
+        <a href={meHref} class="home-cta home-cta--primary">
+          {user ? t(locale, 'home.cta.resumeAuthed') : t(locale, 'home.cta.resume')}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6" />
           </svg>
         </a>
-        <a href="/research/" class="home-cta home-cta--ghost">阅读调研</a>
-        <a href="/projects/" class="home-cta home-cta--ghost">查看项目</a>
+        <a href={researchHref} class="home-cta home-cta--ghost">{t(locale, 'home.cta.research')}</a>
+        <a href={projectsHref} class="home-cta home-cta--ghost">{t(locale, 'home.cta.projects')}</a>
       </div>
 
       {heroTags.length > 0 && (
@@ -97,8 +136,8 @@ function formatPostDate(date: Date) {
   <section class="home-section" id="skills">
     <div class="home-section-inner">
       <header class="home-section-head">
-        <h2 class="home-section-title">AI Native 能力</h2>
-        <p class="home-section-sub">面向可上线交付的 Agent、知识与评测能力</p>
+        <h2 class="home-section-title">{t(locale, 'home.skillsTitle')}</h2>
+        <p class="home-section-sub">{t(locale, 'home.skillsSub')}</p>
       </header>
       <div class="home-skill-grid">
         {skills.map((group) => (
@@ -127,11 +166,11 @@ function formatPostDate(date: Date) {
     <div class="home-section-inner">
       <header class="home-section-head home-section-head--row">
         <div>
-          <h2 class="home-section-title">精选作品</h2>
-          <p class="home-section-sub">公开可浏览的项目与作品</p>
+          <h2 class="home-section-title">{t(locale, 'home.worksTitle')}</h2>
+          <p class="home-section-sub">{t(locale, 'home.worksSub')}</p>
         </div>
-        <a href="/projects/" class="home-section-more">
-          全部项目
+        <a href={projectsHref} class="home-section-more">
+          {t(locale, 'home.worksMore')}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6" />
           </svg>
@@ -139,7 +178,8 @@ function formatPostDate(date: Date) {
       </header>
       {privateWorkCount > 0 && (
         <p class="home-section-note">
-          另有 {privateWorkCount} 项需 <a href="/login?next=/projects/">授权查看</a>
+          {t(locale, 'home.worksPrivate', { n: privateWorkCount })}{' '}
+          <a href={projectsLoginHref}>{t(locale, 'home.authLink')}</a>
         </p>
       )}
       {publicWorks.length > 0 ? (
@@ -148,7 +188,7 @@ function formatPostDate(date: Date) {
             <WorkCard
               title={work.data.title}
               description={work.data.description}
-              type={typeLabels[work.data.type] ?? work.data.type}
+              type={typeLabel(work.data.type)}
               typeKey={work.data.type}
               slug={work.id}
               url={work.data.url}
@@ -157,7 +197,7 @@ function formatPostDate(date: Date) {
           ))}
         </div>
       ) : (
-        <p class="home-empty">暂无公开展示的作品</p>
+        <p class="home-empty">{t(locale, 'home.worksEmpty')}</p>
       )}
     </div>
   </section>
@@ -166,11 +206,11 @@ function formatPostDate(date: Date) {
     <div class="home-section-inner">
       <header class="home-section-head home-section-head--row">
         <div>
-          <h2 class="home-section-title">近期调研</h2>
-          <p class="home-section-sub">工程笔记、方法与复盘</p>
+          <h2 class="home-section-title">{t(locale, 'home.researchTitle')}</h2>
+          <p class="home-section-sub">{t(locale, 'home.researchSub')}</p>
         </div>
-        <a href="/research/" class="home-section-more">
-          全部调研
+        <a href={researchHref} class="home-section-more">
+          {t(locale, 'home.researchMore')}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6" />
           </svg>
@@ -192,12 +232,12 @@ function formatPostDate(date: Date) {
                   ))}
                 </div>
               )}
-              <span class="home-post-read">阅读文章 →</span>
+              <span class="home-post-read">{t(locale, 'home.readArticle')}</span>
             </a>
           ))}
         </div>
       ) : (
-        <p class="home-empty">暂无调研笔记</p>
+        <p class="home-empty">{t(locale, 'home.researchEmpty')}</p>
       )}
     </div>
   </section>

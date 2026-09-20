@@ -1,0 +1,35 @@
+---
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+import HomeDashboard from '../../components/HomeDashboard.astro';
+import { getCollection } from 'astro:content';
+import { filterVisibleWorks } from '../../lib/content';
+
+const locale = 'en' as const;
+const user = Astro.locals.user;
+const isAuthed = Boolean(user);
+
+const allPosts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const recentPosts = allPosts.slice(0, 3);
+
+const allWorks = await getCollection('works');
+const publicWorks = filterVisibleWorks(allWorks, isAuthed)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+const privateWorkCount = isAuthed
+  ? 0
+  : allWorks.filter((w) => w.data.visibility === 'private').length;
+---
+
+<Base title="AI Kosei" compactFooter fullWidth locale={locale}>
+  <HomeDashboard
+    user={user}
+    publicWorks={publicWorks}
+    recentPosts={recentPosts}
+    privateWorkCount={privateWorkCount}
+    locale={locale}
+  />
+</Base>

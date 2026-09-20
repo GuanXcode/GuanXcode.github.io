@@ -10,9 +10,12 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "dev:fresh": "astro dev --force",
     "build": "astro build",
     "check": "astro check",
     "preview": "astro preview",
+    "content:sync": "astro sync",
+    "content:reset": "node scripts/content-reset.mjs",
     "astro": "astro"
   },
   "dependencies": {

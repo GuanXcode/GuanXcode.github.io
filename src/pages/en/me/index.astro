@@ -1,16 +1,16 @@
 ---
 export const prerender = false;
 
-import Base from '../../layouts/Base.astro';
-import ProfileHeader from '../../components/ProfileHeader.astro';
-import Skills from '../../components/Skills.astro';
-import ProjectCard from '../../components/ProjectCard.astro';
-import WorkCard from '../../components/WorkCard.astro';
-import SectionTitle from '../../components/SectionTitle.astro';
+import Base from '../../../layouts/Base.astro';
+import ProfileHeader from '../../../components/ProfileHeader.astro';
+import Skills from '../../../components/Skills.astro';
+import ProjectCard from '../../../components/ProjectCard.astro';
+import WorkCard from '../../../components/WorkCard.astro';
+import SectionTitle from '../../../components/SectionTitle.astro';
 import { getCollection } from 'astro:content';
-import { getLocaleFromPath, withLocale } from '../../lib/i18n';
+import { t, withLocale } from '../../../lib/i18n';
 
-const locale = Astro.locals.locale ?? getLocaleFromPath(Astro.url.pathname);
+const locale = 'en' as const;
 const user = Astro.locals.user!;
 
 const allProjects = (await getCollection('projects')).sort(
@@ -29,32 +29,35 @@ const privateWorks = (await getCollection('works'))
   .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 3);
 
-const typeLabels: Record<string, string> = {
-  demo: 'Demo',
-  design: '设计',
-  talk: '演讲',
-  article: '文章',
-  repo: '仓库',
-  other: '其他',
-};
-
 const skills = [
-  { title: 'Agent 系统', items: ['多 Agent 协作', '工具调用与 MCP', '任务状态机', '人机协同 / HITL'] },
-  { title: '知识与 RAG', items: ['多源检索链路', '权限与隔离', '召回评估', '知识持续更新'] },
-  { title: '评测与护栏', items: ['离线 / 在线评测', '幻觉与越权护栏', '成本与延迟治理', '可观测与回放'] },
-  { title: 'AI 原生架构', items: ['场景化落地', '领域建模', '平台化复用', '长期演进'] },
+  {
+    title: t(locale, 'skill.agent.title'),
+    items: [t(locale, 'skill.agent.i0'), t(locale, 'skill.agent.i1'), t(locale, 'skill.agent.i2'), t(locale, 'skill.agent.i3')],
+  },
+  {
+    title: t(locale, 'skill.rag.title'),
+    items: [t(locale, 'skill.rag.i0'), t(locale, 'skill.rag.i1'), t(locale, 'skill.rag.i2'), t(locale, 'skill.rag.i3')],
+  },
+  {
+    title: t(locale, 'skill.eval.title'),
+    items: [t(locale, 'skill.eval.i0'), t(locale, 'skill.eval.i1'), t(locale, 'skill.eval.i2'), t(locale, 'skill.eval.i3')],
+  },
+  {
+    title: t(locale, 'skill.arch.title'),
+    items: [t(locale, 'skill.arch.i0'), t(locale, 'skill.arch.i1'), t(locale, 'skill.arch.i2'), t(locale, 'skill.arch.i3')],
+  },
 ];
 ---
 
-<Base title="履历总览 - AI Kosei" variant="console" locale={locale}>
+<Base title="Resume - AI Kosei" variant="console" locale={locale}>
   <ProfileHeader user={user} />
 
   {experiences.length > 0 && (
     <section class="py-16">
       <div class="max-w-5xl mx-auto px-6">
         <div class="flex items-center justify-between mb-6">
-          <SectionTitle title="经历" subtitle="职业时间线" icon="timeline" />
-          <a href={withLocale(locale, '/experience/')} class="text-sm text-[var(--color-brand)] hover:underline">完整经历 &rarr;</a>
+          <SectionTitle title="Experience" subtitle="Career timeline" icon="timeline" />
+          <a href={withLocale(locale, '/experience/')} class="text-sm text-[var(--color-brand)] hover:underline">Full experience &rarr;</a>
         </div>
         <ul class="space-y-4 hud-panel">
           {experiences.slice(0, 2).map((exp) => (
@@ -80,8 +83,8 @@ const skills = [
     <section id="projects" class="py-16">
       <div class="max-w-5xl mx-auto px-6">
         <div class="flex items-center justify-between mb-8">
-          <SectionTitle title="项目" subtitle="任务编队 · 概要" icon="projects" />
-          <a href={withLocale(locale, '/projects/')} class="text-sm text-[var(--color-brand)] hover:underline">全部项目 &rarr;</a>
+          <SectionTitle title="Projects" subtitle="Task formation · briefs" icon="projects" />
+          <a href={withLocale(locale, '/projects/')} class="text-sm text-[var(--color-brand)] hover:underline">All projects &rarr;</a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {displayProjects.map((project) => (
@@ -103,15 +106,15 @@ const skills = [
     <section class="py-16">
       <div class="max-w-5xl mx-auto px-6">
         <div class="flex items-center justify-between mb-8">
-          <SectionTitle title="作品" subtitle="仅授权可见" icon="works" />
-          <a href={withLocale(locale, '/projects/#works')} class="text-sm text-[var(--color-brand)] hover:underline">全部作品 &rarr;</a>
+          <SectionTitle title="Works" subtitle="Authorized only" icon="works" />
+          <a href={withLocale(locale, '/projects/#works')} class="text-sm text-[var(--color-brand)] hover:underline">All works &rarr;</a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           {privateWorks.map((work) => (
             <WorkCard
               title={work.data.title}
               description={work.data.description}
-              type={typeLabels[work.data.type] ?? work.data.type}
+              type={work.data.type}
               slug={work.id}
             />
           ))}
@@ -122,7 +125,7 @@ const skills = [
 
   <section id="skills" class="py-20">
     <div class="max-w-5xl mx-auto px-6">
-      <SectionTitle title="技能" subtitle="AI Native · 能力坐标" icon="skills" />
+      <SectionTitle title="Skills" subtitle="AI Native · capability map" icon="skills" />
       <div class="hud-panel mt-8">
       <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-stretch">
         <aside class="radar-panel">
@@ -137,7 +140,7 @@ const skills = [
             <span class="radar-dot d3"></span>
             <span class="radar-dot d4"></span>
           </div>
-          <p class="text-xs text-[var(--color-text-secondary)] mt-4">能力矩阵在线校准中</p>
+          <p class="text-xs text-[var(--color-text-secondary)] mt-4">Capability matrix online</p>
         </aside>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 h-full">
           {skills.map((s, i) => <Skills title={s.title} items={s.items} index={i} />)}
