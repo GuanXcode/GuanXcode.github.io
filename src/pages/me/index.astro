@@ -37,14 +37,14 @@ const typeLabels: Record<string, string> = {
 };
 
 const skills = [
-  { title: '架构设计', items: ['分布式系统', '微服务架构', '领域驱动设计 (DDD)', '系统建模'] },
-  { title: '后端开发', items: ['Java', 'Python', 'Go', 'SQL / NoSQL'] },
-  { title: 'AI 工程', items: ['LLM 应用开发', 'RAG 知识检索', 'AI Agent', 'Prompt Engineering'] },
-  { title: 'DevOps', items: ['CI/CD 流水线', 'Docker / K8s', '云原生', '可观测性'] },
+  { title: 'Agent 系统', items: ['多 Agent 协作', '工具调用与 MCP', '任务状态机', '人机协同 / HITL'] },
+  { title: '知识与 RAG', items: ['多源检索链路', '权限与隔离', '召回评估', '知识持续更新'] },
+  { title: '评测与护栏', items: ['离线 / 在线评测', '幻觉与越权护栏', '成本与延迟治理', '可观测与回放'] },
+  { title: 'AI 原生架构', items: ['场景化落地', '领域建模', '平台化复用', '长期演进'] },
 ];
 ---
 
-<Base title="履历总览 - AI Kosei">
+<Base title="履历总览 - AI Kosei" variant="console">
   <ProfileHeader user={user} />
 
   {experiences.length > 0 && (
@@ -54,9 +54,9 @@ const skills = [
           <SectionTitle title="经历" subtitle="职业时间线" icon="timeline" />
           <a href="/experience/" class="text-sm text-[var(--color-brand)] hover:underline">完整经历 &rarr;</a>
         </div>
-        <ul class="space-y-4">
+        <ul class="space-y-4 hud-panel">
           {experiences.slice(0, 2).map((exp) => (
-            <li class="p-5 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)]">
+            <li class="p-5 rounded-lg border border-[var(--color-border)] bg-[var(--color-card)]">
               <div class="flex flex-wrap justify-between gap-2 mb-1">
                 <h3 class="font-semibold">{exp.data.company}</h3>
                 <span class="text-sm text-[var(--color-text-muted)]">
@@ -75,7 +75,7 @@ const skills = [
   )}
 
   {displayProjects.length > 0 && (
-    <section id="projects" class="py-16 bg-[var(--color-bg-alt)]">
+    <section id="projects" class="py-16">
       <div class="max-w-5xl mx-auto px-6">
         <div class="flex items-center justify-between mb-8">
           <SectionTitle title="项目" subtitle="任务编队 · 概要" icon="projects" />
@@ -102,7 +102,7 @@ const skills = [
       <div class="max-w-5xl mx-auto px-6">
         <div class="flex items-center justify-between mb-8">
           <SectionTitle title="作品" subtitle="仅授权可见" icon="works" />
-          <a href="/works/" class="text-sm text-[var(--color-brand)] hover:underline">全部作品 &rarr;</a>
+          <a href="/projects/#works" class="text-sm text-[var(--color-brand)] hover:underline">全部作品 &rarr;</a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           {privateWorks.map((work) => (
@@ -118,10 +118,11 @@ const skills = [
     </section>
   )}
 
-  <section id="skills" class="py-20 bg-[var(--color-bg-alt)]">
+  <section id="skills" class="py-20">
     <div class="max-w-5xl mx-auto px-6">
-      <SectionTitle title="技能" subtitle="能力坐标" icon="skills" />
-      <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-stretch mt-8">
+      <SectionTitle title="技能" subtitle="AI Native · 能力坐标" icon="skills" />
+      <div class="hud-panel mt-8">
+      <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-stretch">
         <aside class="radar-panel">
           <div class="radar-grid">
             <span class="radar-hex h1"></span>
@@ -139,6 +140,7 @@ const skills = [
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 h-full">
           {skills.map((s, i) => <Skills title={s.title} items={s.items} index={i} />)}
         </div>
+      </div>
       </div>
     </div>
   </section>

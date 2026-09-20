@@ -8,10 +8,10 @@ import { getEntry, render } from 'astro:content';
 import { canViewWork } from '../../lib/content';
 
 const { slug } = Astro.params;
-if (!slug) return Astro.redirect('/works');
+if (!slug) return Astro.redirect('/projects/');
 
 const work = await getEntry('works', slug);
-if (!work) return Astro.redirect('/works');
+if (!work) return Astro.redirect('/projects/');
 
 const user = Astro.locals.user;
 if (!canViewWork(work, Boolean(user))) {
@@ -33,7 +33,7 @@ const typeLabels: Record<string, string> = {
 <Base title={`${work.data.title} - 作品`}>
   <article class="py-16">
     <div class="max-w-4xl mx-auto px-6">
-      <a href="/works/" class="inline-flex text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] mb-6">&larr; 返回作品</a>
+      <a href="/projects/" class="inline-flex text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] mb-6">&larr; 返回项目</a>
       <header class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm mb-8">
         <SectionTitle title={work.data.title} subtitle="作品" icon="works" />
         <div class="mt-4 pl-9">

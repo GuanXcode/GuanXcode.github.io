@@ -3,7 +3,6 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import type { SessionUser } from '../lib/auth';
 import WorkCard from './WorkCard.astro';
-import PostCard from './PostCard.astro';
 import SectionIcon from './SectionIcon.astro';
 
 interface Props {
@@ -19,244 +18,314 @@ const { user, publicWorks, recentPosts, typeLabels, privateWorkCount } = Astro.p
 const profiles = await getCollection('profile');
 const profile = profiles[0]?.data;
 
-const tagline = profile?.tagline ?? '以工程化方法构建可生产的 AI 系统，专注场景化落地与高可靠架构实践';
-const publicBio = profile?.publicBio?.trim() ?? '';
-const bioParts = publicBio.split('\n').map((line) => line.trim()).filter(Boolean);
-const bioFocus = bioParts[0] ?? '';
-const bioHint = bioParts.slice(1).join(' ');
-const bioFocusMatch = bioFocus.match(/^(.+?)[:：]\s*(.+)$/);
-const bioFocusLabel = bioFocusMatch?.[1] ?? '';
-const bioFocusBody = bioFocusMatch?.[2] ?? bioFocus;
-const bioFocusKeywords = ['领域建模', '工程交付', '系统长期演进'] as const;
-const bioFocusKeywordPattern = new RegExp(`(${bioFocusKeywords.join('|')})`, 'g');
+const role = profile?.role ?? 'AI Agent 与知识系统构建者';
+const tagline = profile?.tagline ?? '以 Agent、RAG 与评测闭环，构建可生产的 AI 系统';
+const publicBio =
+  profile?.publicBio?.trim() ??
+  '从场景切入：编排智能体、治理知识、用评测与护栏承接不确定性';
 
-function splitBioFocusTokens(text: string) {
-  return text.split(bioFocusKeywordPattern).filter(Boolean);
-}
+const skills = [
+  {
+    title: 'Agent 系统',
+    summary: '把模型能力收成可编排、可中断、可交付的任务闭环',
+    icon: 'timeline' as const,
+    items: ['多 Agent 协作', '工具调用与 MCP', '任务状态机', '人机协同 / HITL'],
+  },
+  {
+    title: '知识与 RAG',
+    summary: '让回答可溯源、可权限隔离，而不是黑盒问答',
+    icon: 'log' as const,
+    items: ['多源检索链路', '权限与隔离', '召回评估', '知识持续更新'],
+  },
+  {
+    title: '评测与护栏',
+    summary: '用度量与约束承接模型波动，保证上线可控',
+    icon: 'skills' as const,
+    items: ['离线 / 在线评测', '幻觉与越权护栏', '成本与延迟治理', '可观测与回放'],
+  },
+  {
+    title: 'AI 原生架构',
+    summary: '以业务域与演进边界设计平台，而不是堆模型与中间件',
+    icon: 'projects' as const,
+    items: ['场景化落地', '领域建模', '平台化复用', '长期演进'],
+  },
+];
 
-function isBioFocusKeyword(token: string) {
-  return bioFocusKeywords.includes(token as (typeof bioFocusKeywords)[number]);
-}
-const manifesto = profile?.manifesto ?? '复杂在业务域生长，不在工具堆叠；架构师用设计原本承担担当、隔离技术、锚定演进';
-const heroNote = profile?.heroNote ?? '履历含经历与项目，点击后将引导授权';
-const focusAreas = profile?.focusAreas ?? [];
+const heroTags = skills.map((s) => s.title);
 
-const taglineKeywords = ['可生产的 AI 系统', '工程化方法', '场景化落地', '高可靠架构'] as const;
-const taglineKeywordPattern = new RegExp(`(${taglineKeywords.join('|')})`, 'g');
-const taglineSegments = tagline.split(/，|,/).map((segment) => segment.trim()).filter(Boolean);
-
-function splitTaglineTokens(segment: string) {
-  return segment.split(taglineKeywordPattern).filter(Boolean);
-}
-
-function isTaglineKeyword(token: string) {
-  return taglineKeywords.includes(token as (typeof taglineKeywords)[number]);
+function formatPostDate(date: Date) {
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 ---
 
-<div class="home-dashboard">
-  <div class="home-dashboard-top">
-    <div class="home-dashboard-info">
-      <div class="home-tagline-block">
-        <span class="home-tagline-label" aria-hidden="true">PRODUCTION · CORE</span>
-        <h1 class="home-tagline">
-          {taglineSegments.map((segment, index) => (
-            <span class:list={['home-tagline-line', index > 0 && 'home-tagline-line--sub']}>
-              {splitTaglineTokens(segment).map((token) =>
-                isTaglineKeyword(token) ? (
-                  <span class="home-tagline-kw">{token}</span>
-                ) : (
-                  token
-                ),
-              )}
-              {index < taglineSegments.length - 1 ? '，' : ''}
-            </span>
-          ))}
-        </h1>
+<div class="home-landing">
+  <section class="home-hero-stage" aria-label="首页主视觉">
+    <canvas class="home-hero-canvas" id="home-starfield" aria-hidden="true"></canvas>
+    <div class="home-hero-stars home-hero-stars--far" aria-hidden="true"></div>
+    <div class="home-hero-stars home-hero-stars--near" aria-hidden="true"></div>
+    <div class="home-hero-grid" aria-hidden="true"></div>
+    <div class="home-hero-glow" aria-hidden="true"></div>
+
+    <div class="home-hero-inner">
+      <p class="home-hero-hello">你好，我是</p>
+      <h1 class="home-hero-brand">AI Kosei</h1>
+      <p class="home-hero-role">{role}</p>
+      <p class="home-hero-lead">{tagline}</p>
+      {publicBio && <p class="home-hero-desc">{publicBio}</p>}
+
+      <div class="home-hero-ctas">
+        <a href="/me/" class="home-cta home-cta--primary">
+          {user ? '进入履历' : '查看履历'}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </a>
+        <a href="/research/" class="home-cta home-cta--ghost">阅读调研</a>
+        <a href="/projects/" class="home-cta home-cta--ghost">查看项目</a>
       </div>
 
-      {(bioFocus || bioHint) && (
-        <div class="home-bio">
-          {bioFocus && (
-            <p class="home-bio-focus">
-              <span class="home-bio-focus-text">
-                {bioFocusLabel && (
-                  <>
-                    <span class="home-bio-focus-prefix">{bioFocusLabel}</span>
-                    <span class="home-bio-focus-sep" aria-hidden="true">·</span>
-                  </>
-                )}
-                {splitBioFocusTokens(bioFocusBody).map((token) =>
-                  isBioFocusKeyword(token) ? (
-                    <span class="home-bio-focus-kw">{token}</span>
-                  ) : (
-                    token
-                  ),
-                )}
-              </span>
-            </p>
-          )}
-          {bioHint && <p class="home-bio-hint">{bioHint}</p>}
-        </div>
-      )}
-
-      {focusAreas.length > 0 && (
-        <div class="flex flex-wrap gap-1.5">
-          {focusAreas.map((area) => (
-            <span class="text-xs px-2 py-0.5 rounded-full border border-[var(--color-border)] bg-white/80 text-[var(--color-text-muted)]">
-              {area}
-            </span>
+      {heroTags.length > 0 && (
+        <div class="home-hero-tags">
+          {heroTags.map((area) => (
+            <span class="home-hero-tag">{area}</span>
           ))}
         </div>
       )}
-
-      <p class="home-manifesto-line">{manifesto}</p>
     </div>
+  </section>
 
-    <aside class="home-portal-actions home-dashboard-actions">
-      {user ? (
-        <>
-          <div class="flex items-center gap-3 mb-4 pb-4 border-b border-[var(--color-border)]">
-            {user.avatar && (
-              <img src={user.avatar} alt="" class="w-9 h-9 rounded-full border border-[var(--color-border)]" />
-            )}
-            <div>
-              <p class="text-xs text-[var(--color-text-muted)]">已授权</p>
-              <p class="text-sm font-semibold">{user.name}</p>
+  <section class="home-section" id="skills">
+    <div class="home-section-inner">
+      <header class="home-section-head">
+        <h2 class="home-section-title">AI Native 能力</h2>
+        <p class="home-section-sub">面向可上线交付的 Agent、知识与评测能力</p>
+      </header>
+      <div class="home-skill-grid">
+        {skills.map((group) => (
+          <article class="home-skill-card">
+            <div class="home-skill-card-top">
+              <span class="home-skill-icon" aria-hidden="true">
+                <SectionIcon name={group.icon} class="w-4 h-4" />
+              </span>
+              <div>
+                <h3 class="home-skill-title">{group.title}</h3>
+                <p class="home-skill-summary">{group.summary}</p>
+              </div>
             </div>
-          </div>
-          <a href="/me/" class="home-portal-btn home-portal-btn--cta">
-            <span class="home-portal-btn-cta-icon" aria-hidden="true">
-              <SectionIcon name="timeline" class="w-[1.0625rem] h-[1.0625rem]" />
-            </span>
-            <span class="home-portal-btn-cta-label">进入履历总览</span>
-            <svg class="home-portal-btn-cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </a>
-        </>
-      ) : (
-        <>
-          <a href="/me/" class="home-portal-btn home-portal-btn--cta">
-            <span class="home-portal-btn-cta-icon" aria-hidden="true">
-              <SectionIcon name="timeline" class="w-[1.0625rem] h-[1.0625rem]" />
-            </span>
-            <span class="home-portal-btn-cta-label">查看履历</span>
-            <svg class="home-portal-btn-cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </a>
-          <p class="home-portal-hint">{heroNote}</p>
-        </>
-      )}
-
-      <div class="home-portal-btn-row">
-        <a href="/works/" class="home-portal-quick">
-          <span class="home-portal-quick-icon" aria-hidden="true">
-            <SectionIcon name="works" class="w-4 h-4" />
-          </span>
-          <span class="home-portal-quick-label">我的作品</span>
-        </a>
-        <a href="/blog/" class="home-portal-quick">
-          <span class="home-portal-quick-icon home-portal-quick-icon--blog" aria-hidden="true">
-            <SectionIcon name="log" class="w-4 h-4" />
-          </span>
-          <span class="home-portal-quick-label">我的博客</span>
-        </a>
+            <div class="home-skill-chips">
+              {group.items.map((item) => (
+                <span class="home-skill-chip">{item}</span>
+              ))}
+            </div>
+          </article>
+        ))}
       </div>
+    </div>
+  </section>
 
-      <a
-        href="https://github.com/GuanXcode"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="home-github-btn"
-      >
-        <span class="home-github-btn-icon" aria-hidden="true">
-          <svg class="w-[1.125rem] h-[1.125rem]" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
-        </span>
-        <span class="home-github-btn-body">
-          <span class="home-github-btn-label">GitHub</span>
-          <span class="home-github-btn-sub">@GuanXcode</span>
-        </span>
-        <span class="home-github-btn-arrow" aria-hidden="true">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H9M17 7v8" />
-          </svg>
-        </span>
-      </a>
-    </aside>
-  </div>
-
-  <div class="home-dashboard-feed">
-    <section class="home-feed-col">
-      <div class="home-feed-head">
-        <div class="home-feed-head-main">
-          <span class="home-feed-icon" aria-hidden="true">
-            <SectionIcon name="works" class="w-[1.125rem] h-[1.125rem]" />
-          </span>
-          <div>
-            <h2 class="home-feed-title">我的作品</h2>
-            <p class="home-feed-sub">公开展示</p>
-          </div>
+  <section class="home-section" id="projects">
+    <div class="home-section-inner">
+      <header class="home-section-head home-section-head--row">
+        <div>
+          <h2 class="home-section-title">精选作品</h2>
+          <p class="home-section-sub">公开可浏览的项目与作品</p>
         </div>
-        <a href="/works/" class="home-feed-more-btn" aria-label="查看全部作品">
-          <SectionIcon name="arrow-more" class="w-4 h-4" />
+        <a href="/projects/" class="home-section-more">
+          全部项目
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
         </a>
-      </div>
+      </header>
       {privateWorkCount > 0 && (
-        <p class="text-xs text-[var(--color-text-muted)] mb-2">
-          另有 {privateWorkCount} 项需 <a href="/me/" class="text-[var(--color-brand)] hover:underline">授权查看</a>
+        <p class="home-section-note">
+          另有 {privateWorkCount} 项需 <a href="/login?next=/projects/">授权查看</a>
         </p>
       )}
-      <div class="home-feed-list">
-        {publicWorks.length > 0 ? publicWorks.map((work) => (
-          <WorkCard
-            compact
-            title={work.data.title}
-            description={work.data.description}
-            type={typeLabels[work.data.type] ?? work.data.type}
-            typeKey={work.data.type}
-            slug={work.id}
-            url={work.data.url}
-            publicBadge={work.data.visibility === 'public'}
-          />
-        )) : (
-          <p class="text-sm text-[var(--color-text-muted)]">暂无公开展示的作品</p>
-        )}
-      </div>
-    </section>
-
-    <section class="home-feed-col">
-      <div class="home-feed-head">
-        <div class="home-feed-head-main">
-          <span class="home-feed-icon" aria-hidden="true">
-            <SectionIcon name="log" class="w-[1.125rem] h-[1.125rem]" />
-          </span>
-          <div>
-            <h2 class="home-feed-title">我的博客</h2>
-            <p class="home-feed-sub">时间线日志</p>
-          </div>
+      {publicWorks.length > 0 ? (
+        <div class="home-works-grid">
+          {publicWorks.map((work) => (
+            <WorkCard
+              title={work.data.title}
+              description={work.data.description}
+              type={typeLabels[work.data.type] ?? work.data.type}
+              typeKey={work.data.type}
+              slug={work.id}
+              url={work.data.url}
+              publicBadge={work.data.visibility === 'public'}
+            />
+          ))}
         </div>
-        <a href="/blog/" class="home-feed-more-btn" aria-label="查看全部博客">
-          <SectionIcon name="arrow-more" class="w-4 h-4" />
+      ) : (
+        <p class="home-empty">暂无公开展示的作品</p>
+      )}
+    </div>
+  </section>
+
+  <section class="home-section home-section--last" id="research">
+    <div class="home-section-inner">
+      <header class="home-section-head home-section-head--row">
+        <div>
+          <h2 class="home-section-title">近期调研</h2>
+          <p class="home-section-sub">工程笔记、方法与复盘</p>
+        </div>
+        <a href="/research/" class="home-section-more">
+          全部调研
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
         </a>
-      </div>
-      <div class="home-feed-list">
-        {recentPosts.length > 0 ? recentPosts.map((post) => (
-          <PostCard
-            compact
-            title={post.data.title}
-            excerpt={post.data.subtitle || post.body?.replace(/<[^>]*>/g, '').replace(/[#*>`\[\]()!]/g, '').trim().slice(0, 100)}
-            date={post.data.date}
-            tags={post.data.tags}
-            slug={post.id}
-          />
-        )) : (
-          <p class="text-sm text-[var(--color-text-muted)]">暂无文章</p>
-        )}
-      </div>
-    </section>
-  </div>
+      </header>
+      {recentPosts.length > 0 ? (
+        <div class="home-posts">
+          {recentPosts.map((post) => (
+            <a href={`/blog/${post.id}/`} class="home-post-card">
+              <time class="home-post-date">{formatPostDate(post.data.date)}</time>
+              <h3 class="home-post-title">{post.data.title}</h3>
+              <p class="home-post-excerpt">
+                {post.data.subtitle || post.body?.replace(/<[^>]*>/g, '').replace(/[#*>`\[\]()!]/g, '').trim().slice(0, 110)}
+              </p>
+              {post.data.tags?.length > 0 && (
+                <div class="home-post-tags">
+                  {post.data.tags.slice(0, 3).map((tag) => (
+                    <span class="home-post-tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+              <span class="home-post-read">阅读文章 →</span>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p class="home-empty">暂无调研笔记</p>
+      )}
+    </div>
+  </section>
 </div>
+
+<script>
+  function initHomeStarfield() {
+    const canvas = document.getElementById('home-starfield');
+    if (!(canvas instanceof HTMLCanvasElement)) return;
+    if (canvas.dataset.ready === '1') return;
+    canvas.dataset.ready = '1';
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const stage = canvas.parentElement;
+    if (!stage) return;
+
+    /** @type {{ x: number; y: number; r: number; vx: number; vy: number; a: number; tw: number; sp: number }[]} */
+    let stars = [];
+    let raf = 0;
+    let running = false;
+
+    function resize() {
+      const rect = stage.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+      canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `${rect.height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      seed(rect.width, rect.height);
+    }
+
+    function seed(w, h) {
+      const count = Math.min(110, Math.max(48, Math.floor((w * h) / 14000)));
+      stars = Array.from({ length: count }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.4 + 0.4,
+        vx: (Math.random() - 0.5) * 0.12,
+        vy: -0.04 - Math.random() * 0.1,
+        a: 0.25 + Math.random() * 0.7,
+        tw: Math.random() * Math.PI * 2,
+        sp: 0.8 + Math.random() * 1.6,
+      }));
+    }
+
+    function drawStatic() {
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      for (const s of stars) {
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(125, 211, 252, ${s.a * 0.85})`;
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function tick() {
+      if (!running) return;
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+
+      for (const s of stars) {
+        s.x += s.vx;
+        s.y += s.vy;
+        s.tw += 0.02 * s.sp;
+        if (s.y < -4) {
+          s.y = h + 4;
+          s.x = Math.random() * w;
+        }
+        if (s.x < -4) s.x = w + 4;
+        if (s.x > w + 4) s.x = -4;
+
+        const pulse = 0.45 + 0.55 * Math.abs(Math.sin(s.tw));
+        const alpha = s.a * pulse;
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(186, 230, 253, ${alpha})`;
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (s.r > 1.1) {
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(56, 189, 248, ${alpha * 0.35})`;
+          ctx.arc(s.x, s.y, s.r * 2.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      raf = requestAnimationFrame(tick);
+    }
+
+    function start() {
+      if (running) return;
+      running = true;
+      raf = requestAnimationFrame(tick);
+    }
+
+    function stop() {
+      running = false;
+      cancelAnimationFrame(raf);
+    }
+
+    resize();
+    if (reduceMotion) {
+      drawStatic();
+    } else {
+      start();
+    }
+
+    const onResize = () => {
+      resize();
+      if (reduceMotion) drawStatic();
+    };
+    window.addEventListener('resize', onResize);
+
+    const onVisibility = () => {
+      if (reduceMotion) return;
+      if (document.hidden) stop();
+      else start();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+  }
+
+  initHomeStarfield();
+  document.addEventListener('astro:page-load', initHomeStarfield);
+</script>

@@ -41,8 +41,7 @@
 | `@astrojs/vercel` | high | ISR function 未授权路径覆盖（≥10.0.3 <11.0.3） | ≥ **11.0.3**（当前最新 11.0.10） |
 | `@astrojs/vercel` → `@vercel/routing-utils` → `path-to-regexp` | high | 生成回溯正则，ReDoS | 随 adapter 11 |
 
-**结论**：剩下这批只能靠 Astro 6 → 7 迁移解决，且 `astro` 与 `@astrojs/vercel` 必须同时升（adapter 11 的 peer 要求 astro ^7）。
-迁移前需确认 Node ≥ 22.12.0（`astro@7` 的 engines 要求）。
+**结论（2026-09-20 已落地）**：Astro 7.3.3 + `@astrojs/vercel` 11.0.10 已升。Astro / ISR / sharp / esbuild 条目随大版本消失。`path-to-regexp` 仍被 `@vercel/routing-utils@6.6.0` 钉在 6.1.0，用 `package.json` overrides 钉到 **6.3.0** 后 `npm audit` 为 0。详见 `docs/astro-7-migration.md`。
 
 ## 关联配置
 

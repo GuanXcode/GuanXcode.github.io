@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 
 const profiles = await getCollection('profile');
-const tagline = profiles[0]?.data.tagline ?? '以工程化方法构建可生产的 AI 系统，专注场景化落地与高可靠架构实践';
+const tagline = profiles[0]?.data.tagline ?? '以 Agent、RAG 与评测闭环，构建可生产的 AI 系统';
 ---
 
 <section class="py-24 md:py-32">
@@ -20,7 +20,7 @@ const tagline = profiles[0]?.data.tagline ?? '以工程化方法构建可生产�
       {tagline}
     </p>
     <div class="flex items-center justify-center gap-4 flex-wrap">
-      <a href="/me/" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--color-brand)] text-white text-sm hover:opacity-90 transition-opacity">
+      <a href="/me/" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--color-brand)] text-[#070b12] text-sm font-semibold hover:opacity-90 transition-opacity">
         查看履历
       </a>
       <a href="/works/" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[var(--color-border)] text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text)] hover:border-[var(--color-brand)] transition-all">

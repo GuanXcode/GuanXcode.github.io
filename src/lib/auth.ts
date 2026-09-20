@@ -158,10 +158,18 @@ export async function exchangeGitHubCode(
   };
 }
 
-export const PROTECTED_PREFIXES = ['/me', '/experience', '/projects'];
+export const PROTECTED_PREFIXES = ['/me', '/experience'];
+
+function normalizePath(pathname: string): string {
+  if (pathname.length > 1 && pathname.endsWith('/')) return pathname.slice(0, -1);
+  return pathname;
+}
 
 export function isProtectedPath(pathname: string): boolean {
-  return PROTECTED_PREFIXES.some(
-    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
-  );
+  const path = normalizePath(pathname);
+  if (PROTECTED_PREFIXES.some((prefix) => path === prefix || path.startsWith(`${prefix}/`))) {
+    return true;
+  }
+  // /projects hub is public (works); project summaries stay gated
+  return path.startsWith('/projects/');
 }

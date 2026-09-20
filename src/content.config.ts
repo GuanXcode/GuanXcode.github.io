@@ -61,6 +61,7 @@ const works = defineCollection({
 const profile = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/profile' }),
   schema: z.object({
+    role: z.string().optional(),
     tagline: z.string(),
     publicBio: z.string(),
     focusAreas: z.array(z.string()).default([]),

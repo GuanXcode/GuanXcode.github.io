@@ -5,7 +5,7 @@ import SectionTitle from '../../../components/SectionTitle.astro';
 import { getCollection } from 'astro:content';
 
 const { tag } = Astro.params;
-if (!tag) return Astro.redirect('/blog');
+if (!tag) return Astro.redirect('/research/');
 
 const posts = (await getCollection('blog'))
   .filter((p) => p.data.tags.includes(tag) && !p.data.draft)
@@ -15,7 +15,7 @@ const posts = (await getCollection('blog'))
 <Base title={`${tag} - AI Kosei`}>
   <section class="py-16">
     <div class="max-w-4xl mx-auto px-6">
-      <a href="/blog/" class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] transition-colors mb-4">&larr; 全部坐标</a>
+      <a href="/research/" class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] transition-colors mb-4">&larr; 全部调研</a>
       <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm mb-8">
         <SectionTitle title={`标签坐标 #${tag}`} icon="tag" />
       </div>

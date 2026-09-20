@@ -32,14 +32,12 @@ const privateWorkCount = isAuthed
   : allWorks.filter((w) => w.data.visibility === 'private').length;
 ---
 
-<Base title="AI Kosei" compactFooter>
-  <div class="max-w-5xl mx-auto px-6">
-    <HomeDashboard
+<Base title="AI Kosei" compactFooter fullWidth>
+  <HomeDashboard
     user={user}
     publicWorks={publicWorks}
     recentPosts={recentPosts}
     typeLabels={typeLabels}
     privateWorkCount={privateWorkCount}
-    />
-  </div>
+  />
 </Base>
