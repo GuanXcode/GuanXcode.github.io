@@ -20,6 +20,7 @@ export const zh = {
   'support.close': '关闭弹窗',
   'support.email': '邮箱',
   'support.github': 'GitHub',
+  'support.website': '网站',
 
   'home.hello': '你好，我是',
   'home.role': 'AI Agent 与知识系统构建者',
