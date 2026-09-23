@@ -22,6 +22,7 @@ export const en: Record<MessageKey, string> = {
   'support.close': 'Close',
   'support.email': 'Email',
   'support.github': 'GitHub',
+  'support.website': 'Website',
 
   'home.hello': "Hello, I'm",
   'home.role': 'Builder of AI agents & knowledge systems',
