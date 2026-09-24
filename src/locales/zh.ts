@@ -22,7 +22,7 @@ export const zh = {
   'support.github': 'GitHub',
   'support.website': '网站',
   'support.wechat': '微信',
-  'support.wechatCopy': '复制微信号',
+  'support.wechatScan': '扫码添加',
 
   'home.hello': '你好，我是',
   'home.role': 'AI Agent 与知识系统构建者',
