@@ -25,6 +25,7 @@ export const en: Record<MessageKey, string> = {
   'support.website': 'Website',
   'support.wechat': 'WeChat',
   'support.wechatScan': 'Scan to add',
+  'support.wechatHide': 'Hide',
 
   'home.hello': "Hello, I'm",
   'home.role': 'Builder of AI agents & knowledge systems',
