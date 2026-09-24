@@ -23,6 +23,8 @@ export const en: Record<MessageKey, string> = {
   'support.email': 'Email',
   'support.github': 'GitHub',
   'support.website': 'Website',
+  'support.wechat': 'WeChat',
+  'support.wechatCopy': 'Copy WeChat ID',
 
   'home.hello': "Hello, I'm",
   'home.role': 'Builder of AI agents & knowledge systems',
