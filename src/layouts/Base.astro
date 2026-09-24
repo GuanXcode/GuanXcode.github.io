@@ -161,13 +161,17 @@ import '../styles/global.css';
             </span>
             <span class="font-mono text-xs">agentdev.online</span>
           </a>
-          <button type="button" id="support-wechat" class="support-link" data-wechat-id="a39085417" aria-label={t(locale, 'support.wechatCopy')}>
+          <button type="button" id="support-wechat" class="support-link" aria-expanded="false" aria-controls="support-wechat-qr">
             <span class="support-link-left">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .32.26.58.57.58a.626.626 0 0 0 .314-.105l1.903-1.09a.58.58 0 0 1 .316-.09c.062 0 .124.01.18.026 1.004.279 2.096.433 3.231.433h.229a6.52 6.52 0 0 1-.097-.997c0-3.4 3.135-6.156 7.006-6.156h.229C16.618 4.911 13.017 2.188 8.691 2.188zm-2.6 4.408a.966.966 0 1 1 0-1.92.966.966 0 0 1 0 1.92zm5.189 0a.966.966 0 1 1 0-1.92.966.966 0 0 1 0 1.92zM24 15.364c0-3.404-3.388-6.157-7.559-6.157-4.17 0-7.557 2.753-7.557 6.157s3.388 6.157 7.557 6.157c.885 0 1.737-.123 2.527-.35a.48.48 0 0 1 .258.034l1.655.904a.534.534 0 0 0 .262.087.487.487 0 0 0 .484-.49c0-.087-.024-.16-.042-.235l-.324-1.243a.487.487 0 0 1 .181-.553C23.004 18.906 24 17.238 24 15.364zm-9.913-1.56a.822.822 0 1 1 0-1.645.822.822 0 0 1 0 1.646zm4.71 0a.822.822 0 1 1 0-1.645.822.822 0 0 1 0 1.646z"/></svg>
               <span>{t(locale, 'support.wechat')}</span>
             </span>
-            <span class="font-mono text-xs">a39085417</span>
+            <span class="support-wechat-hint font-mono text-xs">{t(locale, 'support.wechatScan')}</span>
           </button>
+          <div id="support-wechat-qr" class="hidden support-wechat-qr">
+            <img src="/img/wechat-qr.svg" alt={t(locale, 'support.wechatScan')} width="180" height="180" loading="lazy" />
+            <p class="font-mono text-xs">a39085417</p>
+          </div>
         </div>
       </div>
     </div>
@@ -210,38 +214,12 @@ import '../styles/global.css';
       });
 
       const wechatBtn = document.getElementById('support-wechat');
-      wechatBtn?.addEventListener('click', async () => {
-        const wechatId = wechatBtn.getAttribute('data-wechat-id') ?? '';
-        try {
-          await navigator.clipboard.writeText(wechatId);
-          wechatBtn.setAttribute('aria-label', t_copy_ok());
-          showToast(t_copy_ok());
-        } catch {
-          showToast(t_copy_fail());
-        }
+      const wechatQr = document.getElementById('support-wechat-qr');
+      wechatBtn?.addEventListener('click', () => {
+        const expanded = wechatBtn.getAttribute('aria-expanded') === 'true';
+        wechatBtn.setAttribute('aria-expanded', String(!expanded));
+        wechatQr?.classList.toggle('hidden');
       });
-
-      function t_copy_ok() {
-        return document.documentElement.lang === 'en' ? 'WeChat ID copied' : '微信号已复制';
-      }
-      function t_copy_fail() {
-        return document.documentElement.lang === 'en' ? 'Copy failed — please copy manually' : '复制失败,请手动复制';
-      }
-
-      let toastTimer: ReturnType<typeof setTimeout> | undefined;
-      function showToast(message: string) {
-        let toast = document.getElementById('support-toast');
-        if (!toast) {
-          toast = document.createElement('div');
-          toast.id = 'support-toast';
-          toast.setAttribute('role', 'status');
-          document.body.appendChild(toast);
-        }
-        toast.textContent = message;
-        toast.classList.add('support-toast-visible');
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => toast?.classList.remove('support-toast-visible'), 2000);
-      }
     </script>
 
     <style>
@@ -252,26 +230,29 @@ import '../styles/global.css';
         text-align: left;
       }
 
-      #support-toast {
-        position: fixed;
-        bottom: 5.5rem;
-        right: 1.25rem;
-        z-index: 80;
-        padding: 0.5rem 0.9rem;
-        border-radius: 0.6rem;
-        border: 1px solid var(--color-border);
-        background: rgba(15, 23, 42, 0.88);
-        color: #fff;
-        font-size: 0.8rem;
-        opacity: 0;
-        transform: translateY(4px);
-        pointer-events: none;
-        transition: opacity 0.2s ease, transform 0.2s ease;
+      .support-wechat-hint {
+        color: var(--color-text-muted);
       }
 
-      #support-toast.support-toast-visible {
-        opacity: 1;
-        transform: translateY(0);
+      .support-wechat-qr {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.8rem;
+        border: 1px dashed var(--color-border);
+        border-radius: 0.7rem;
+        background: #fff;
+      }
+
+      .support-wechat-qr img {
+        width: 180px;
+        height: 180px;
+        display: block;
+      }
+
+      .support-wechat-qr p {
+        color: var(--color-text-secondary);
       }
     </style>
   </body>
