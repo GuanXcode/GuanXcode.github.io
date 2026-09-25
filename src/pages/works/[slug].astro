@@ -34,7 +34,7 @@ const typeLabels: Record<string, string> = {
   <article class="py-16">
     <div class="max-w-4xl mx-auto px-6">
       <a href="/projects/" class="inline-flex text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] mb-6">&larr; 返回项目</a>
-      <header class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm mb-8">
+      <header class="p-6 md:p-8 mb-8">
         <SectionTitle title={work.data.title} subtitle="作品" icon="works" />
         <div class="mt-4 pl-9">
           <WorkTypeBadge type={typeLabels[work.data.type] ?? work.data.type} public={work.data.visibility === 'public'} />
@@ -47,9 +47,9 @@ const typeLabels: Record<string, string> = {
         )}
       </header>
       {work.data.image && (
-        <img src={work.data.image} alt="" class="w-full rounded-xl mb-8 border border-[var(--color-border)]" />
+        <img src={work.data.image} alt="" class="w-full rounded-xl mb-8" />
       )}
-      <div class="prose rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/85 p-6 md:p-8">
+      <div class="prose p-6 md:p-8">
         <Content />
       </div>
     </div>

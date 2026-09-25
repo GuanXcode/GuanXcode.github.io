@@ -19,7 +19,7 @@ const { entries } = Astro.props;
         <span class="timeline-dot"></span>
         {index < entries.length - 1 && <span class="timeline-line"></span>}
       </div>
-      <div class="timeline-body rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm">
+      <div class="timeline-body py-6">
         <header class="mb-4">
           <p class="text-xs tracking-[0.14em] uppercase text-[var(--color-brand-light)] mb-2">
             {exp.data.start}{exp.data.end ? ` — ${exp.data.end}` : ''}

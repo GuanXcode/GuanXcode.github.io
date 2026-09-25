@@ -105,7 +105,7 @@ const contentNote = t(locale, 'projects.contentNote');
         {isAuthed ? (
           <>
             <p class="text-sm text-[var(--color-text-secondary)] -mt-4 mb-6 pl-9">{t(locale, 'projects.briefsHint')}</p>
-            <div class="hud-panel">
+            <div class="">
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {allProjects.map((project) => (
                   <a href={withLocale(locale, `/projects/${project.id}/`)} class="block">
@@ -121,7 +121,7 @@ const contentNote = t(locale, 'projects.contentNote');
             </div>
           </>
         ) : (
-          <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6">
+          <div class="p-6">
             <p class="text-sm text-[var(--color-text-secondary)] mb-4">
               {t(locale, 'projects.briefsLocked')}
             </p>
