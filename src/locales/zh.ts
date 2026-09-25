@@ -23,6 +23,7 @@ export const zh = {
   'support.website': '网站',
   'support.wechat': '微信',
   'support.wechatScan': '扫码添加',
+  'support.wechatHide': '收起',
 
   'home.hello': '你好，我是',
   'home.role': 'AI Agent 与知识系统构建者',
