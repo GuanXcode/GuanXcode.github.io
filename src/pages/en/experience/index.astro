@@ -10,7 +10,7 @@ import { withLocale } from '../../../lib/i18n';
 const locale = 'en' as const;
 
 const experiences = (await getCollection('experience')).sort(
-  (a, b) => a.data.order - b.data.order,
+  (a, b) => b.data.order - a.data.order,
 );
 
 const experienceEntries = await Promise.all(
@@ -27,7 +27,7 @@ const experienceEntries = await Promise.all(
       <a href={withLocale(locale, '/me/')} class="inline-flex text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] mb-6">&larr; Back to resume</a>
       <p class="content-lang-note mb-6">Experience detail content is currently in Chinese.</p>
       <SectionTitle title="Experience" subtitle="Career timeline" icon="timeline" />
-      <div class="hud-panel mt-8">
+      <div class="mt-8">
       <p class="text-sm text-[var(--color-text-secondary)] mb-8">Full employment record (authorized visitors).</p>
 
       {experienceEntries.length > 0 ? (

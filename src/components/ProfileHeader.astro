@@ -10,7 +10,7 @@ const { user } = Astro.props;
 
 <section class="py-10">
   <div class="max-w-5xl mx-auto px-6">
-    <div class="hud-panel flex items-center gap-4">
+    <div class="flex items-center gap-4">
       {user.avatar && (
         <img src={user.avatar} alt="" class="w-12 h-12 rounded-full border border-[var(--color-border)]" />
       )}

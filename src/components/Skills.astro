@@ -9,7 +9,7 @@ const { title, items, index } = Astro.props;
 const code = typeof index === 'number' ? `C-${String(index + 1).padStart(2, '0')}` : null;
 ---
 
-<div class="relative p-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] hover:shadow-md transition-shadow">
+<div class="relative p-6">
   {code && (
     <span class="absolute top-3 right-3 text-[11px] font-mono text-[var(--color-text-muted)] tracking-widest">{code}</span>
   )}

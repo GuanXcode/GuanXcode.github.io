@@ -25,7 +25,7 @@ const dateStr = post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', mo
   <article class="py-16">
     <div class="max-w-4xl mx-auto px-6">
       <a href="/research/" class="inline-flex items-center gap-1 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] transition-colors mb-4">&larr; 返回调研</a>
-      <header class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/90 p-6 md:p-8 shadow-sm mb-8">
+      <header class="p-6 md:p-8 mb-8">
         <div class="mb-3">
           <SectionTitle title={post.data.title} icon="article" />
         </div>
@@ -37,7 +37,7 @@ const dateStr = post.data.date.toLocaleDateString('zh-CN', { year: 'numeric', mo
           {post.data.tags.length > 0 && <><span>&middot;</span><div class="flex gap-1.5">{post.data.tags.map((tag) => <a href={`/blog/tag/${tag}/`} class="hover:text-[var(--color-brand)] transition-colors">#{tag}</a>)}</div></>}
         </div>
       </header>
-      <div class="prose rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)]/85 p-6 md:p-8 shadow-sm"><Content /></div>
+      <div class="prose p-6 md:p-8"><Content /></div>
       {(prevPost || nextPost) && (
         <nav class="mt-10 pt-8 border-t border-[var(--color-border)] flex justify-between gap-4">
           {prevPost ? <a href={`/blog/${prevPost.id}/`} class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-brand)] transition-colors">&larr; 上一坐标：{prevPost.data.title}</a> : <div />}

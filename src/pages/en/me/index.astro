@@ -21,7 +21,7 @@ const displayProjects =
   featuredProjects.length > 0 ? featuredProjects : allProjects.slice(0, 3);
 
 const experiences = (await getCollection('experience')).sort(
-  (a, b) => a.data.order - b.data.order,
+  (a, b) => b.data.order - a.data.order,
 );
 
 const privateWorks = (await getCollection('works'))
@@ -59,9 +59,9 @@ const skills = [
           <SectionTitle title="Experience" subtitle="Career timeline" icon="timeline" />
           <a href={withLocale(locale, '/experience/')} class="text-sm text-[var(--color-brand)] hover:underline">Full experience &rarr;</a>
         </div>
-        <ul class="space-y-4 hud-panel">
+        <ul>
           {experiences.slice(0, 2).map((exp) => (
-            <li class="p-5 rounded-lg border border-[var(--color-border)] bg-[var(--color-card)]">
+            <li class="py-5">
               <div class="flex flex-wrap justify-between gap-2 mb-1">
                 <h3 class="font-semibold">{exp.data.company}</h3>
                 <span class="text-sm text-[var(--color-text-muted)]">
@@ -126,7 +126,7 @@ const skills = [
   <section id="skills" class="py-20">
     <div class="max-w-5xl mx-auto px-6">
       <SectionTitle title="Skills" subtitle="AI Native · capability map" icon="skills" />
-      <div class="hud-panel mt-8">
+      <div class="mt-8">
       <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-stretch">
         <aside class="radar-panel">
           <div class="radar-grid">

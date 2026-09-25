@@ -37,7 +37,7 @@ const shortDate = date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'nu
     </svg>
   </a>
 ) : (
-  <a href={`/blog/${slug}/`} class="block group rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] hover:shadow-md transition-all p-6">
+  <a href={`/blog/${slug}/`} class="block group p-6">
     <h3 class="font-semibold mb-1 group-hover:text-[var(--color-brand)] transition-colors text-base">{title}</h3>
     {excerpt && (
       <p class="text-[var(--color-text-secondary)] text-sm mb-3 line-clamp-2">{excerpt}</p>

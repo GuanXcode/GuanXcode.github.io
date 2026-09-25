@@ -21,7 +21,7 @@ const brief = project.data.designBrief?.trim();
     <div class="max-w-4xl mx-auto px-6">
       <a href={withLocale(locale, '/projects/')} class="inline-flex text-sm text-[var(--color-text-muted)] hover:text-[var(--color-brand)] mb-6">&larr; Back to projects</a>
       <p class="content-lang-note mb-6">Detail content is currently in Chinese.</p>
-      <header class="hud-panel mb-8">
+      <header class="mb-8">
         <SectionTitle title={project.data.title} subtitle="Project brief" icon="projects" />
         <p class="text-[var(--color-text-secondary)] mt-4 pl-9">{project.data.description}</p>
         <div class="flex flex-wrap gap-3 text-sm text-[var(--color-text-muted)] mt-3 pl-9">
@@ -35,10 +35,10 @@ const brief = project.data.designBrief?.trim();
         </div>
       </header>
       {project.data.image && (
-        <img src={project.data.image} alt="" class="w-full rounded-xl mb-8 border border-[var(--color-border)]" />
+        <img src={project.data.image} alt="" class="w-full rounded-xl mb-8" />
       )}
       {brief && (
-        <div class="hud-panel">
+        <div class="">
           <h3 class="text-sm font-semibold text-[var(--color-text)] mb-4">Design brief</h3>
           <div class="prose text-sm whitespace-pre-line">{brief}</div>
         </div>
