@@ -5,7 +5,8 @@ name: CI
 # 在 push 时自动构建发布（见 astro.config.mjs）。
 on:
   push:
-    branches: [master]
+    # master 是发布分支，astro-7 是当前开发分支（master 已落后 23 个 commit）
+    branches: [master, astro-7]
   pull_request:
 
 permissions:
