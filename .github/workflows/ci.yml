@@ -1,0 +1,39 @@
+name: CI
+
+# 质量门禁：类型/模板检查 + 构建。
+# 部署不由本 workflow 负责 —— 站点通过 @astrojs/vercel adapter 由 Vercel
+# 在 push 时自动构建发布（见 astro.config.mjs）。
+on:
+  push:
+    # master 是发布分支，astro-7 是当前开发分支（master 已落后 23 个 commit）
+    branches: [master, astro-7]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  # 同一 ref 的多次推送只保留最新一次，避免排队浪费 runner
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Astro check & build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # 类型 + .astro 模板诊断（含 i18n、content collection schema）
+      - name: Astro check
+        run: npm run check
+
+      - name: Build
+        run: npm run build

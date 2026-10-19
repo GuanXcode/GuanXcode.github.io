@@ -12,6 +12,8 @@ import { LOCALE_COOKIE } from '../lib/i18n';
 interface Props {
   title: string;
   description?: string;
+  /** 社交分享卡片图（绝对或相对路径；OG/Twitter 共用） */
+  image?: string;
   fullWidth?: boolean;
   compactFooter?: boolean;
   variant?: 'public' | 'console' | 'gate';
@@ -30,6 +32,13 @@ const {
 
 const locale: Locale = localeProp ?? Astro.locals.locale ?? getLocaleFromPath(Astro.url.pathname);
 const description = Astro.props.description ?? t(locale, 'meta.defaultDescription');
+// SEO 字段
+const siteUrl = Astro.site?.toString() ?? Astro.url.origin;
+const canonicalPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonical = new URL(canonicalPath, siteUrl).href;
+const ogImagePath = Astro.props.image ?? '/img/avatar_m.jpg';
+const ogImage = new URL(ogImagePath, siteUrl).href;
+const ogLocale = locale === 'zh' ? 'zh_CN' : 'en_US';
 const user = Astro.locals.user;
 const shellClass = fullWidth
   ? (compactFooter ? 'w-full px-3 sm:px-4' : 'w-full px-4 sm:px-6 lg:px-8')
@@ -76,7 +85,24 @@ import '../styles/global.css';
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
     <link rel="alternate" hreflang="zh-CN" href={new URL(zhHref, Astro.site ?? Astro.url.origin).href} />
     <link rel="alternate" hreflang="en" href={new URL(enHref, Astro.site ?? Astro.url.origin).href} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title="AI Kosei RSS" href="/rss.xml" />
     <title>{title}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:site_name" content="AI Kosei" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
   </head>
   <body class="min-h-screen flex flex-col">
     <header class="sticky top-0 z-50 bg-[var(--color-bg)]/80 backdrop-blur-md border-b border-[var(--color-border)]">
