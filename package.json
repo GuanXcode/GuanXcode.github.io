@@ -27,6 +27,6 @@
     "astro": "^7.3.3",
     "marked": "^14.1.4",
     "tailwindcss": "^4.2.2",
-    "typescript": "^5.9.3"
+    "typescript": "^7.0.2"
   }
 }
