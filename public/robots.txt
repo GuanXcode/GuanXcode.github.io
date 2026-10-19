@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Sitemap 与 RSS 索引点
+Sitemap: https://guanxcode.vip/sitemap-index.xml
+
+# 不让搜索引擎索引内部鉴权/管理路径
+Disallow: /auth/
+Disallow: /api/
+Disallow: /login

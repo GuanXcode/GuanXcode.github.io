@@ -95,6 +95,23 @@ function formatPostDate(date: Date) {
     year: 'numeric',
   });
 }
+
+/**
+ * 文章摘要：优先用 subtitle，否则从正文剥掉 HTML / Markdown 标记后截断。
+ *
+ * 这段必须放在 frontmatter 而不是模板里：正则中的 `<` `>` 若出现在模板
+ * 表达式中，会被 .astro → TSX 转换器误判为 JSX 标签边界，导致整个文件
+ * 后续解析错位，@astrojs/check 会报出大量级联误报（"Cannot find name …"）。
+ */
+function postExcerpt(post: CollectionEntry<'blog'>): string {
+  if (post.data.subtitle) return post.data.subtitle;
+  const body = post.body ?? '';
+  return body
+    .replace(/<[^>]*>/g, '')
+    .replace(/[#*>`\[\]()!]/g, '')
+    .trim()
+    .slice(0, 110);
+}
 ---
 
 <div class="home-landing">
@@ -223,7 +240,7 @@ function formatPostDate(date: Date) {
               <time class="home-post-date">{formatPostDate(post.data.date)}</time>
               <h3 class="home-post-title">{post.data.title}</h3>
               <p class="home-post-excerpt">
-                {post.data.subtitle || post.body?.replace(/<[^>]*>/g, '').replace(/[#*>`\[\]()!]/g, '').trim().slice(0, 110)}
+                {postExcerpt(post)}
               </p>
               {post.data.tags?.length > 0 && (
                 <div class="home-post-tags">
@@ -244,21 +261,38 @@ function formatPostDate(date: Date) {
 </div>
 
 <script>
+  interface Star {
+    x: number;
+    y: number;
+    r: number;
+    vx: number;
+    vy: number;
+    a: number;
+    tw: number;
+    sp: number;
+  }
+
   function initHomeStarfield() {
-    const canvas = document.getElementById('home-starfield');
-    if (!(canvas instanceof HTMLCanvasElement)) return;
-    if (canvas.dataset.ready === '1') return;
-    canvas.dataset.ready = '1';
+    const canvasEl = document.getElementById('home-starfield');
+    if (!(canvasEl instanceof HTMLCanvasElement)) return;
+    if (canvasEl.dataset.ready === '1') return;
+    canvasEl.dataset.ready = '1';
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const ctx2d = canvasEl.getContext('2d');
+    if (!ctx2d) return;
 
-    const stage = canvas.parentElement;
-    if (!stage) return;
+    const stageEl = canvasEl.parentElement;
+    if (!stageEl) return;
 
-    /** @type {{ x: number; y: number; r: number; vx: number; vy: number; a: number; tw: number; sp: number }[]} */
-    let stars = [];
+    // TypeScript 不会把外层的 narrowing 带进闭包（resize / seed / drawStatic / tick
+    // 都在 initHomeStarfield 之后才被调用），若直接用原始变量，闭包内会重新退化成
+    // `HTMLElement | null` / `CanvasRenderingContext2D | null`。这里显式取非空别名。
+    const canvas: HTMLCanvasElement = canvasEl;
+    const ctx: CanvasRenderingContext2D = ctx2d;
+    const stage: HTMLElement = stageEl;
+
+    let stars: Star[] = [];
     let raf = 0;
     let running = false;
 
@@ -273,7 +307,7 @@ function formatPostDate(date: Date) {
       seed(rect.width, rect.height);
     }
 
-    function seed(w, h) {
+    function seed(w: number, h: number) {
       const count = Math.min(110, Math.max(48, Math.floor((w * h) / 14000)));
       stars = Array.from({ length: count }, () => ({
         x: Math.random() * w,
