@@ -19,12 +19,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.10",
+    "@astrojs/check": "^0.9.12",
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.4",
-    "@astrojs/vercel": "^11.0.10",
+    "@astrojs/vercel": "^11.0.16",
     "@tailwindcss/vite": "^4.2.2",
-    "astro": "^7.3.3",
+    "astro": "^7.4.2",
     "marked": "^14.1.4",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3"
